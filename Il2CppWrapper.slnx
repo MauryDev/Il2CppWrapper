@@ -7,5 +7,5 @@
     <File Path="LICENSE.txt" />
     <File Path="README.md" />
   </Folder>
-  <Project Path="Il2CppWrapper/Il2CppWrapper.vcxproj" />
+  <Project Path="Il2CppWrapper/Il2CppWrapper.vcxproj" Id="07548281-33a0-4960-9733-0f6c7e4ee35a" />
 </Solution>

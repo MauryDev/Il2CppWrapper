@@ -5,6 +5,8 @@
 #include <string>
 #include "DistCallback.h"
 #include <type_traits>
+#include <array>
+#include <stdexcept>
 
 namespace Il2CppWrapper {
 
@@ -392,15 +394,16 @@ namespace Il2CppWrapper {
 	{
 		bool isValid() const;
 		template <typename T>
-		T* as() const {
-			return static_cast<T*>(this);
+		T* as() {
+			return reinterpret_cast<T*>(this);
 		}
 
 		template <typename T>
 		T get() const {
 			if (!isValid()) return T{};
+			auto temp = this;
 			T value{};
-			PointerToValue(this, value);
+			PointerToValue(temp, value);
 			return value;
 		}
 		Pointer* add(size_t offset) const;
@@ -413,6 +416,14 @@ namespace Il2CppWrapper {
 		// Comparação
 		bool operator==(const Pointer* other) const;
 		bool Equals(const Pointer* other) const;
+		template <typename T>
+		static Pointer* ToPointer(const T& value)
+		{
+			Pointer* ret{};
+
+			ValueToPointer(ret, value);
+			return ret;
+		}
 	};
 
 	
@@ -595,9 +606,7 @@ namespace Il2CppWrapper {
 		template <typename T>
 		T Unbox() const {
 			auto ptr = (Pointer*)UnboxImpl();
-			T ret{};
-			PointerToValue(ptr, ret);
-			return ret;
+			return ptr->get<T>();
 		}
 
 		static Object* BoxImpl(Class* klass, void* value);
@@ -628,18 +637,16 @@ namespace Il2CppWrapper {
 				(uintptr_t)GetRawAddress() + (index * sizeof(T))
 			);
 
-			T val{};
-			PointerToValue(elementPtr, val); 
-			return val;
+			
+			return elementPtr->get<T>();
 		}
 		void SetAtGeneric(uint32_t index, Pointer* valuePtr, size_t elementSize);
 
 		template <typename T>
 		void SetAt(uint32_t index, const T& value) {
-			Pointer* ref = nullptr;
-			ValueToPointer(ref, value); // Prepara o ponteiro para o valor
+			Pointer* ref = Pointer::ToPointer(value);
 
-			SetAtGeneric(index, value, sizeof(T));
+			SetAtGeneric(index, ref, sizeof(T));
 		}
 
 		template <typename T>
@@ -781,20 +788,18 @@ namespace Il2CppWrapper {
 
 		template <typename T>
 		T GetValue(Object* obj) {
-			Pointer* ref{};
 			T val{};
-			ValueToPointer(ref, val);
-			GetValueImpl(obj, this, ref);
+			Pointer* ref = Pointer::ToPointer(val);
+			GetValueImpl(obj, ref);
 			return val;
 		}
 
 		void SetValueImpl(Object* obj, void* val);
 
 		template <typename T>
-		void SetValue(Object* obj, const T& value) {
+		void SetValue(Object* obj, T&& value) {
 
-			Pointer* ref{};
-			ValueToPointer(ref, value);
+			Pointer* ref = Pointer::ToPointer(value);
 			SetValueImpl(obj, ref);
 		}
 
@@ -807,18 +812,17 @@ namespace Il2CppWrapper {
 		void GetStaticValueImpl(void* val);
 		template <typename T>
 		T GetStaticValue() {
-			Pointer* ref{};
 			T val{};
-			ValueToPointer(ref, val);
+			Pointer* ref = Pointer::ToPointer(val);
+
 			GetStaticValueImpl(ref);
 			return val;
 		}
 		void SetStaticValueImpl(void* val);
 
 		template <typename T>
-		void SetStaticValue(const T& value) {
-			Pointer* ref{};
-			ValueToPointer(ref, value);
+		void SetStaticValue(T&& value) {
+			Pointer* ref = Pointer::ToPointer(value);
 			SetStaticValueImpl(ref);
 		}
 
@@ -951,25 +955,69 @@ namespace Il2CppWrapper {
 		Pointer* Invoke(Pointer* obj, std::span<Pointer*> args, Exception** exc = nullptr);
 
 		/**
-		 * @brief Helper template para invocar métodos de forma mais simples.
+		 * @brief Helper template para invocar métodos de forma mais simples usando std::array.
 		 */
 		template <typename TObj, typename... Args>
 		Pointer* InvokeSafe(TObj&& obj, Exception** exc, Args&&... args) {
-			std::vector<Pointer*> params;
-			// O helper unpack_args usará ValueToPointer em cada argumento
-			auto toPointer = [&](auto&& value) {
-				Pointer* p;
-				ValueToPointer(p, std::forward<decltype(value)>(value));
-				return p;
-			};
+			// 1. Definimos o tamanho do array em tempo de compilação
+			constexpr std::size_t numArgs = sizeof...(Args);
 
-			(params.push_back(toPointer(std::forward<Args>(args))), ...);
+			Pointer* that = Pointer::ToPointer(obj);
 
-			Pointer* that{};
-			ValueToPointer(that, obj);
-			return Invoke(that, params, exc);
+			if constexpr (numArgs > 0) {
+				// 2. Criamos o array na stack
+				std::array<Pointer*, numArgs> params;
+
+				// 3. Preenchemos o array usando uma Fold Expression e um índice auxiliar
+				std::size_t i = 0;
+				((params[i++] = Pointer::ToPointer(args)), ...);
+
+				// 4. Chamamos o Invoke (ajuste o Invoke para aceitar std::array ou use data())
+				return Invoke(that, params, exc);
+			}
+			else {
+				// Caso não haja argumentos
+				return Invoke(that, nullptr, 0, exc);
+			}
 		}
 
+		/** * @brief Helper template para invocar métodos lançando exceção em caso de erro.
+ */
+		template <typename TObj, typename... Args>
+		Pointer* InvokeUnsafe(TObj&& obj, Args&&... args) {
+			constexpr std::size_t numArgs = sizeof...(Args);
+
+			// Criamos um ponteiro local para capturar a exceção do sistema interno
+			Exception* exc = nullptr;
+			Pointer* result = nullptr;
+
+			Pointer* that = Pointer::ToPointer(std::forward<TObj>(obj));
+
+			if constexpr (numArgs > 0) {
+				std::array<Pointer*, numArgs> params;
+				std::size_t i = 0;
+				((params[i++] = Pointer::ToPointer(std::forward<Args>(args))), ...);
+
+				result = Invoke(that, params.data(), numArgs, &exc);
+			}
+			else {
+				result = Invoke(that, nullptr, 0, &exc);
+			}
+
+			// Se 'exc' não for nulo, algo deu errado no Invoke
+			if (exc != nullptr) {
+				// Supondo que sua classe Exception tenha um método para pegar a mensagem
+
+				std::string errorMsg = exc->getMessage();
+
+				// Opcional: liberar a memória da exceção antes de dar o throw
+				// FreeException(exc); 
+
+				throw std::runtime_error("Erro no InvokeUnsafe: " + errorMsg);
+			}
+
+			return result;
+		}
 	};
 
 	struct Property : Pointer {
@@ -995,15 +1043,11 @@ namespace Il2CppWrapper {
 
 		template <typename TObj, typename T>
 		T GetValue(TObj&& obj = nullptr) const {
-			T val{};
-			Pointer* refObj{};
+			Pointer* refObj = Pointer::ToPointer(obj);
 			
-			ValueToPointer(refObj, obj);
 			Pointer* result = GetValueImpl(refObj);
-			if (result) {
-				PointerToValue(result, val);
-			}
-			return val;
+			
+			return result->get<T>();
 		}
 
 		// --- SetValue ---
@@ -1011,10 +1055,9 @@ namespace Il2CppWrapper {
 
 		template <typename TObj, typename T>
 		void SetValue(TObj&& obj,  T&& value) {
-			Pointer refValue{}, refObj{};
-			ValueToPointer(refValue, value);
-
-			ValueToPointer(refObj, obj);
+			Pointer refValue = Pointer::ToPointer(value),
+				refObj = Pointer::ToPointer(obj);
+			
 			// O método 'set' espera o valor como argumento
 			SetValueImpl(refObj, refValue);
 		}
@@ -1434,19 +1477,20 @@ namespace Il2CppWrapper {
 	template <typename T>
 	void ValueToPointer(Pointer*& ptr, const T& value)
 	{
-		if constexpr (std::is_pointer_v<T> && || std::is_same_v<T, std::nullptr_t>) {
-			value = reinterpret_cast<T>(const_cast<Pointer*>(ptr));
+		if constexpr (std::is_pointer_v<T>  || std::is_same_v<T, std::nullptr_t>) {
+			using NonConstT = std::add_pointer_t<std::remove_cv_t<std::remove_pointer_t<T>>>;
+			ptr = reinterpret_cast<Pointer*>(const_cast<NonConstT>(value));
 		}
 		else {
-			
-			ptr = reinterpret_cast<Pointer*>(const_cast<T*>(&value));
+			using NonConstT = std::remove_cv_t<T>;
+			ptr = reinterpret_cast<Pointer*>(const_cast<NonConstT*>(&value));
 		}
 	}
 
 
 	
 	template <typename T>
-	void PointerToValue(const Pointer*& ptr, T& value)
+	void PointerToValue(const Pointer* ptr, T& value)
 	{
 
 		if constexpr (std::is_same_v<T, bool>) {
@@ -1454,7 +1498,7 @@ namespace Il2CppWrapper {
 			uint8_t temp = (*reinterpret_cast<const uint8_t*>(ptr)) & 0x1;
 			value = (temp != 0);
 		}
-		else if constexpr (std::is_pointer_v<T> && || std::is_same_v<T, std::nullptr_t>) {
+		else if constexpr (std::is_pointer_v<T> || std::is_same_v<T, std::nullptr_t>) {
 			value = reinterpret_cast<T>(const_cast<Pointer*>(ptr));
 		}
 		else {
@@ -1462,5 +1506,203 @@ namespace Il2CppWrapper {
 		}
 	}
 
+
+
+	/**
+	 * @brief RAII Guard para MemoryInformation
+	 * Libera automaticamente o snapshot ao sair do escopo
+	 */
+	struct MemoryInformationGuard {
+		MemoryInformation* ptr;
+
+		MemoryInformationGuard();
+
+		explicit MemoryInformationGuard(MemoryInformation* p);
+
+		MemoryInformationGuard(const MemoryInformationGuard&) = delete;
+		MemoryInformationGuard& operator=(const MemoryInformationGuard&) = delete;
+
+		MemoryInformationGuard(MemoryInformationGuard&& other) noexcept;
+
+		MemoryInformationGuard& operator=(MemoryInformationGuard&& other) noexcept;
+
+		~MemoryInformationGuard();
+
+		MemoryInformation* get() const;
+		MemoryInformation* operator->() const;
+		MemoryInformation& operator*() const;
+
+		MemoryInformation* release();
+		
+
+		void reset(MemoryInformation* p = nullptr);
+
+		explicit operator bool() const;
+	};
+
+	/**
+	 * @brief RAII Guard para CustomAttribute
+	 * Libera automaticamente os atributos ao sair do escopo
+	 */
+	struct CustomAttributeGuard {
+		CustomAttribute* ptr;
+
+		CustomAttributeGuard();
+
+		explicit CustomAttributeGuard(CustomAttribute* p);
+
+		CustomAttributeGuard(const CustomAttributeGuard&) = delete;
+		CustomAttributeGuard& operator=(const CustomAttributeGuard&) = delete;
+
+		CustomAttributeGuard(CustomAttributeGuard&& other) noexcept;
+
+		CustomAttributeGuard& operator=(CustomAttributeGuard&& other) noexcept;
+
+		~CustomAttributeGuard();
+
+		CustomAttribute* get() const;
+		CustomAttribute* operator->() const;
+		CustomAttribute& operator*() const;
+
+		CustomAttribute* release();
+
+		void reset(CustomAttribute* p = nullptr);
+
+		explicit operator bool() const;
+	};
+
+	/**
+	 * @brief RAII Guard para ManagedPointer
+	 * Libera automaticamente a memória gerenciada ao sair do escopo
+	 */
+	struct ManagedPointerGuard {
+		ManagedPointer* ptr;
+
+		ManagedPointerGuard();
+
+		explicit ManagedPointerGuard(ManagedPointer* p);
+
+		ManagedPointerGuard(const ManagedPointerGuard&) = delete;
+		ManagedPointerGuard& operator=(const ManagedPointerGuard&) = delete;
+
+		ManagedPointerGuard(ManagedPointerGuard&& other) noexcept;
+
+		ManagedPointerGuard& operator=(ManagedPointerGuard&& other) noexcept;
+
+		~ManagedPointerGuard();
+
+		ManagedPointer* get() const;
+		ManagedPointer* operator->() const;
+
+		template <typename T>
+		T* as() const { return ptr->as<T>(); }
+
+		ManagedPointer* release();
+
+		void reset(ManagedPointer* p = nullptr);
+
+		explicit operator bool() const;
+	};
+
+	/**
+	 * @brief RAII Guard para GCPointerFixed
+	 * Libera automaticamente o ponteiro fixo ao sair do escopo
+	 */
+	struct GCPointerFixedGuard {
+		GCPointerFixed* ptr;
+
+		GCPointerFixedGuard();
+
+		explicit GCPointerFixedGuard(GCPointerFixed* p);
+
+		GCPointerFixedGuard(const GCPointerFixedGuard&) = delete;
+		GCPointerFixedGuard& operator=(const GCPointerFixedGuard&) = delete;
+
+		GCPointerFixedGuard(GCPointerFixedGuard&& other) noexcept;
+
+		GCPointerFixedGuard& operator=(GCPointerFixedGuard&& other) noexcept;
+
+		~GCPointerFixedGuard();
+
+		GCPointerFixed* get() const;
+		GCPointerFixed* operator->() const;
+
+		template <typename T>
+		T* as() const { return ptr->as<T>(); }
+
+		GCPointerFixed* release();
+
+		void reset(GCPointerFixed* p = nullptr);
+
+		explicit operator bool() const;
+	};
+
+	/**
+	 * @brief RAII Guard para GCHandle
+	 * Libera automaticamente o handle ao sair do escopo
+	 */
+	struct GCHandleGuard {
+		GCHandle* ptr;
+
+		GCHandleGuard();
+
+		explicit GCHandleGuard(GCHandle* p);
+
+		GCHandleGuard(const GCHandleGuard&) = delete;
+		GCHandleGuard& operator=(const GCHandleGuard&) = delete;
+
+		GCHandleGuard(GCHandleGuard&& other) noexcept;
+
+		GCHandleGuard& operator=(GCHandleGuard&& other) noexcept;
+
+		~GCHandleGuard();
+
+		GCHandle* get() const;
+		GCHandle* operator->() const;
+
+		Object* GetTarget() const;
+
+		GCHandle* release();
+
+		void reset(GCHandle* p = nullptr);
+
+		explicit operator bool() const;
+	};
+
+	/**
+	 * @brief RAII Guard para Liveness
+	 * Libera automaticamente os dados de liveness ao sair do escopo
+	 */
+	struct LivenessGuard {
+		Liveness* ptr;
+
+		LivenessGuard();
+
+		explicit LivenessGuard(Liveness* p);
+
+		LivenessGuard(const LivenessGuard&) = delete;
+		LivenessGuard& operator=(const LivenessGuard&) = delete;
+
+		LivenessGuard(LivenessGuard&& other) noexcept;
+
+		LivenessGuard& operator=(LivenessGuard&& other) noexcept;
+
+		~LivenessGuard();
+
+		Liveness* get() const;
+		Liveness* operator->() const;
+
+		void FromRoot(Object* root);
+
+		void FromStatics();
+
+		void Finalize();
+
+		Liveness* release();
+
+		void reset(Liveness* p = nullptr);
+
+		explicit operator bool() const;
+	};
 
 }

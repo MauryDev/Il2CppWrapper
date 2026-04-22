@@ -977,16 +977,16 @@ namespace Il2CppWrapper {
     }
     void Property::SetValueImpl(Pointer* that, Pointer* value) const
     {
+
         Method* getMethod = (Method*)GetGetMethod();
         if (getMethod->isValid()) {
             Pointer* args[] = {value};
             getMethod->Invoke(that, args);
 
         }
-        auto c = (Pointer*)nullptr;
-        Pointer* ref = (Pointer*)c;
+       
 
-        ValueToPointer(ref, c);
+
     }
     Class* Object::GetClass() const
     {
@@ -1500,6 +1500,231 @@ namespace Il2CppWrapper {
         il2cpp_set_config_utf16(executablePath);
 
     }
+
+    MemoryInformationGuard::MemoryInformationGuard() : ptr(nullptr) {}
+
+    MemoryInformationGuard::MemoryInformationGuard(MemoryInformation* p) : ptr(p) {}
+
+
+    MemoryInformationGuard::MemoryInformationGuard(MemoryInformationGuard&& other) noexcept
+        : ptr(other.release()) {}
+
+    MemoryInformationGuard& MemoryInformationGuard::operator=(MemoryInformationGuard&& other) noexcept {
+
+        reset(other.release());
+        return *this;
+    }
+
+    MemoryInformationGuard::~MemoryInformationGuard() {
+        if (ptr) ptr->Free();
+    }
+
+    MemoryInformation* MemoryInformationGuard::MemoryInformationGuard::get() const { return ptr; }
+    MemoryInformation* MemoryInformationGuard::MemoryInformationGuard::operator->() const { return ptr; }
+    MemoryInformation& MemoryInformationGuard::MemoryInformationGuard::operator*() const { return *ptr; }
+
+    MemoryInformation* MemoryInformationGuard::release() {
+        auto temp = ptr;
+        ptr = nullptr;
+        return temp;
+    }
+
+    void MemoryInformationGuard::reset(MemoryInformation* p) {
+        if (ptr) ptr->Free();
+        ptr = p;
+    }
+
+    MemoryInformationGuard::operator bool() const { return ptr != nullptr; }
+
+
+    CustomAttributeGuard::CustomAttributeGuard() : ptr(nullptr) {}
+
+    CustomAttributeGuard::CustomAttributeGuard(CustomAttribute* p) : ptr(p) {}
+
+
+    CustomAttributeGuard::CustomAttributeGuard(CustomAttributeGuard&& other) noexcept
+        : ptr(other.release()) {}
+
+    CustomAttributeGuard& CustomAttributeGuard::operator=(CustomAttributeGuard&& other) noexcept {
+        reset(other.release());
+        return *this;
+    }
+
+    CustomAttributeGuard::~CustomAttributeGuard() {
+        if (ptr) ptr->Free();
+    }
+
+    CustomAttribute* CustomAttributeGuard::get() const { return ptr; }
+    CustomAttribute* CustomAttributeGuard::operator->() const { return ptr; }
+    CustomAttribute& CustomAttributeGuard::operator*() const { return *ptr; }
+
+    CustomAttribute* CustomAttributeGuard::release() {
+        auto temp = ptr;
+        ptr = nullptr;
+        return temp;
+    }
+
+    void CustomAttributeGuard::reset(CustomAttribute* p) {
+        if (ptr) ptr->Free();
+        ptr = p;
+    }
+
+    CustomAttributeGuard::operator bool() const { return ptr != nullptr; }
+
+
+    ManagedPointerGuard::ManagedPointerGuard() : ptr(nullptr) {}
+
+    ManagedPointerGuard::ManagedPointerGuard(ManagedPointer* p) : ptr(p) {}
+
+
+    ManagedPointerGuard::ManagedPointerGuard(ManagedPointerGuard&& other) noexcept
+        : ptr(other.release()) {}
+
+    ManagedPointerGuard& ManagedPointerGuard::operator=(ManagedPointerGuard&& other) noexcept {
+        reset(other.release());
+        return *this;
+    }
+
+    ManagedPointerGuard::~ManagedPointerGuard() {
+        if (ptr) ptr->Free();
+    }
+
+    ManagedPointer* ManagedPointerGuard::get() const { return ptr; }
+    ManagedPointer* ManagedPointerGuard::operator->() const { return ptr; }
+
+   
+
+    ManagedPointer* ManagedPointerGuard::release() {
+        auto temp = ptr;
+        ptr = nullptr;
+        return temp;
+    }
+
+    void ManagedPointerGuard::reset(ManagedPointer* p) {
+        if (ptr) ptr->Free();
+        ptr = p;
+    }
+
+    ManagedPointerGuard::operator bool() const { return ptr != nullptr; }
+
+
+    GCPointerFixedGuard::GCPointerFixedGuard() : ptr(nullptr) {}
+
+    GCPointerFixedGuard::GCPointerFixedGuard(GCPointerFixed* p) : ptr(p) {}
+
+
+    GCPointerFixedGuard::GCPointerFixedGuard(GCPointerFixedGuard&& other) noexcept
+        : ptr(other.release()) {}
+
+    GCPointerFixedGuard& GCPointerFixedGuard::operator=(GCPointerFixedGuard&& other) noexcept {
+        reset(other.release());
+        return *this;
+    }
+
+    GCPointerFixedGuard::~GCPointerFixedGuard() {
+        if (ptr) ptr->Free();
+    }
+
+    GCPointerFixed* GCPointerFixedGuard::get() const { return ptr; }
+    GCPointerFixed* GCPointerFixedGuard::operator->() const { return ptr; }
+
+  
+
+    GCPointerFixed* GCPointerFixedGuard::release() {
+        auto temp = ptr;
+        ptr = nullptr;
+        return temp;
+    }
+
+    void GCPointerFixedGuard::reset(GCPointerFixed* p) {
+        if (ptr) ptr->Free();
+        ptr = p;
+    }
+
+    GCPointerFixedGuard::operator bool() const { return ptr != nullptr; }
+
+    GCHandleGuard::GCHandleGuard() : ptr(nullptr) {}
+
+    GCHandleGuard::GCHandleGuard(GCHandle* p) : ptr(p) {}
+
+
+    GCHandleGuard::GCHandleGuard(GCHandleGuard&& other) noexcept
+        : ptr(other.release()) {}
+
+    GCHandleGuard& GCHandleGuard::operator=(GCHandleGuard&& other) noexcept {
+        reset(other.release());
+        return *this;
+    }
+
+    GCHandleGuard::~GCHandleGuard() {
+        if (ptr) ptr->Free();
+    }
+
+    GCHandle* GCHandleGuard::get() const { return ptr; }
+    GCHandle* GCHandleGuard::operator->() const { return ptr; }
+
+    Object* GCHandleGuard::GetTarget() const { return ptr ? ptr->GetTarget() : nullptr; }
+
+    GCHandle* GCHandleGuard::release() {
+        auto temp = ptr;
+        ptr = nullptr;
+        return temp;
+    }
+
+    void GCHandleGuard::reset(GCHandle* p) {
+        if (ptr) ptr->Free();
+        ptr = p;
+    }
+
+    GCHandleGuard::operator bool() const { return ptr != nullptr; }
+
+
+    LivenessGuard::LivenessGuard() : ptr(nullptr) {}
+
+    LivenessGuard::LivenessGuard(Liveness* p) : ptr(p) {}
+
+
+    LivenessGuard::LivenessGuard(LivenessGuard&& other) noexcept
+        : ptr(other.release()) {}
+
+    LivenessGuard& LivenessGuard::operator=(LivenessGuard&& other) noexcept {
+        reset(other.release());
+        return *this;
+    }
+
+    LivenessGuard::~LivenessGuard() {
+        if (ptr) ptr->Free();
+    }
+
+    Liveness* LivenessGuard::get() const { return ptr; }
+    Liveness* LivenessGuard::operator->() const { return ptr; }
+
+    void LivenessGuard::FromRoot(Object* root) {
+        if (ptr) ptr->FromRoot(root);
+    }
+
+    void LivenessGuard::FromStatics() {
+        if (ptr) ptr->FromStatics();
+    }
+
+    void LivenessGuard::Finalize() {
+        if (ptr) ptr->Finalize();
+    }
+
+    Liveness* LivenessGuard::release() {
+        auto temp = ptr;
+        ptr = nullptr;
+        return temp;
+    }
+
+    void LivenessGuard::reset(Liveness* p) {
+        if (ptr) ptr->Free();
+        ptr = p;
+    }
+
+    LivenessGuard::operator bool() const { return ptr != nullptr; }
+
+
 }
 
 
