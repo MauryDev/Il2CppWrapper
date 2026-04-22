@@ -278,6 +278,8 @@ namespace Il2CppWrapper {
 #undef LOAD_API
     }
 
+    
+
     bool Pointer::isValid() const
     {
         return this != nullptr;
@@ -383,6 +385,11 @@ namespace Il2CppWrapper {
     {
         if (!isValid()) return true;
         return GetLength() == 0;
+    }
+    void Array::SetAtGeneric(uint32_t index, Pointer* valuePtr, size_t elementSize)
+    {
+        void* dest = (void*)((uintptr_t)GetRawAddress() + (index * elementSize));
+        memcpy(dest, valuePtr, elementSize);
     }
     void Array::Clear()
     {
@@ -927,6 +934,10 @@ namespace Il2CppWrapper {
         }
         return params;
     }
+    Pointer* Method::Invoke(Pointer* obj, std::span<Pointer*> args, Exception** exc)
+    {
+        return Runtime::Invoke(this,obj, (void**)args.data(), exc);
+    }
     const char* Property::GetName() const
     {
         return il2cpp_property_get_name((Property*)this);
@@ -954,6 +965,28 @@ namespace Il2CppWrapper {
     bool Property::CanWrite() const
     {
         return GetSetMethod() != nullptr;
+    }
+    Pointer* Property::GetValueImpl(Pointer* that)
+    {
+        Method* getMethod = (Method*)GetGetMethod();
+        if (getMethod->isValid()) {
+            return getMethod->Invoke(that, {});
+           
+        }
+        return nullptr;
+    }
+    void Property::SetValueImpl(Pointer* that, Pointer* value) const
+    {
+        Method* getMethod = (Method*)GetGetMethod();
+        if (getMethod->isValid()) {
+            Pointer* args[] = {value};
+            getMethod->Invoke(that, args);
+
+        }
+        auto c = (Pointer*)nullptr;
+        Pointer* ref = (Pointer*)c;
+
+        ValueToPointer(ref, c);
     }
     Class* Object::GetClass() const
     {

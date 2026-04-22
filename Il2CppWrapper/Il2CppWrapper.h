@@ -4,6 +4,8 @@
 #include <vector>
 #include <string>
 #include "DistCallback.h"
+#include <type_traits>
+
 namespace Il2CppWrapper {
 
 	namespace {
@@ -397,7 +399,9 @@ namespace Il2CppWrapper {
 		template <typename T>
 		T get() const {
 			if (!isValid()) return T{};
-			return *static_cast<T*>(this);
+			T value{};
+			PointerToValue(this, value);
+			return value;
 		}
 		Pointer* add(size_t offset) const;
 
@@ -590,7 +594,10 @@ namespace Il2CppWrapper {
 		 */
 		template <typename T>
 		T Unbox() const {
-			return *static_cast<T*>(UnboxImpl());
+			auto ptr = (Pointer*)UnboxImpl();
+			T ret{};
+			PointerToValue(ptr, ret);
+			return ret;
 		}
 
 		static Object* BoxImpl(Class* klass, void* value);
@@ -616,12 +623,23 @@ namespace Il2CppWrapper {
 		static Array* NewFull(Class* array_class, std::span<Array_size_t> lengths, std::span<Array_size_t> lower_bounds);
 		Pointer* GetRawAddress();
 		template <typename T>
-		T& GetAt(uint32_t index) {
-			return static_cast<T*>(GetRawAddress())[index];
+		T GetAt(uint32_t index) {
+			Pointer* elementPtr = reinterpret_cast<Pointer*>(
+				(uintptr_t)GetRawAddress() + (index * sizeof(T))
+			);
+
+			T val{};
+			PointerToValue(elementPtr, val); 
+			return val;
 		}
+		void SetAtGeneric(uint32_t index, Pointer* valuePtr, size_t elementSize);
+
 		template <typename T>
-		void SetAt(uint32_t index, T value) {
-			static_cast<T*>(GetRawAddress())[index] = value;
+		void SetAt(uint32_t index, const T& value) {
+			Pointer* ref = nullptr;
+			ValueToPointer(ref, value); // Prepara o ponteiro para o valor
+
+			SetAtGeneric(index, value, sizeof(T));
 		}
 
 		template <typename T>
@@ -653,12 +671,13 @@ namespace Il2CppWrapper {
 		template<typename T>
 		uint32_t IndexOf(T value) {
 			uint32_t len = GetLength();
-			T* data = begin();
 			for (uint32_t i = 0; i < len; i++) {
-				if (data[i] == value) return i;
+				T currentItem = GetAt<T>(i); // Usa a versão segura acima
+				if (currentItem == value) return i;
 			}
 			return -1;
 		}
+
 
 		template<typename T>
 		bool Contains(T value) {
@@ -687,7 +706,6 @@ namespace Il2CppWrapper {
 		T& GetAt(uint32_t index) {
 			return  Array::GetAt<T>(index);
 		}
-		template <typename T>
 		void SetAt(uint32_t index, T value) {
 
 			Array::SetAt<T>(index, value);
@@ -706,14 +724,14 @@ namespace Il2CppWrapper {
 
 		uint32_t IndexOf(T value) {
 			
-			return IndexOf(value); 
+			return Array::IndexOf(value); 
 		}
 		bool Contains(T value) {
-			return Contains(value) != -1;
+			return Array::Contains(value);
 		}
 		void CopyFrom(std::span<T> src)
 		{
-			CopyFrom(src);
+			Array::CopyFrom(src);
 		}
 	};
 
@@ -763,8 +781,10 @@ namespace Il2CppWrapper {
 
 		template <typename T>
 		T GetValue(Object* obj) {
+			Pointer* ref{};
 			T val{};
-			GetValueImpl(obj, this, &val);
+			ValueToPointer(ref, val);
+			GetValueImpl(obj, this, ref);
 			return val;
 		}
 
@@ -772,7 +792,10 @@ namespace Il2CppWrapper {
 
 		template <typename T>
 		void SetValue(Object* obj, const T& value) {
-			GetValueImpl(obj, &value);
+
+			Pointer* ref{};
+			ValueToPointer(ref, value);
+			SetValueImpl(obj, ref);
 		}
 
 		Object* GetValueObject(Object* obj);
@@ -784,15 +807,19 @@ namespace Il2CppWrapper {
 		void GetStaticValueImpl(void* val);
 		template <typename T>
 		T GetStaticValue() {
+			Pointer* ref{};
 			T val{};
-			GetStaticValueImpl(&val);
+			ValueToPointer(ref, val);
+			GetStaticValueImpl(ref);
 			return val;
 		}
 		void SetStaticValueImpl(void* val);
 
 		template <typename T>
 		void SetStaticValue(const T& value) {
-			SetStaticValueImpl(&value);
+			Pointer* ref{};
+			ValueToPointer(ref, value);
+			SetStaticValueImpl(ref);
 		}
 
 		// --- Reflexão ---
@@ -920,6 +947,29 @@ namespace Il2CppWrapper {
 		void* GetNativePointer() const;
 
 		std::vector<ParameterInfo> GetParameters() const;
+
+		Pointer* Invoke(Pointer* obj, std::span<Pointer*> args, Exception** exc = nullptr);
+
+		/**
+		 * @brief Helper template para invocar métodos de forma mais simples.
+		 */
+		template <typename TObj, typename... Args>
+		Pointer* InvokeSafe(TObj&& obj, Exception** exc, Args&&... args) {
+			std::vector<Pointer*> params;
+			// O helper unpack_args usará ValueToPointer em cada argumento
+			auto toPointer = [&](auto&& value) {
+				Pointer* p;
+				ValueToPointer(p, std::forward<decltype(value)>(value));
+				return p;
+			};
+
+			(params.push_back(toPointer(std::forward<Args>(args))), ...);
+
+			Pointer* that{};
+			ValueToPointer(that, obj);
+			return Invoke(that, params, exc);
+		}
+
 	};
 
 	struct Property : Pointer {
@@ -940,6 +990,34 @@ namespace Il2CppWrapper {
 
 		// Verifica se a propriedade pode ser escrita
 		bool CanWrite() const;
+
+		Pointer* GetValueImpl(Pointer* that = nullptr);
+
+		template <typename TObj, typename T>
+		T GetValue(TObj&& obj = nullptr) const {
+			T val{};
+			Pointer* refObj{};
+			
+			ValueToPointer(refObj, obj);
+			Pointer* result = GetValueImpl(refObj);
+			if (result) {
+				PointerToValue(result, val);
+			}
+			return val;
+		}
+
+		// --- SetValue ---
+		void SetValueImpl(Pointer* that, Pointer* value) const;
+
+		template <typename TObj, typename T>
+		void SetValue(TObj&& obj,  T&& value) {
+			Pointer refValue{}, refObj{};
+			ValueToPointer(refValue, value);
+
+			ValueToPointer(refObj, obj);
+			// O método 'set' espera o valor como argumento
+			SetValueImpl(refObj, refValue);
+		}
 
 		
 	};
@@ -1352,4 +1430,37 @@ namespace Il2CppWrapper {
 	struct MemoryCallbacks: Pointer {
 		void Set();
 	};
+
+	template <typename T>
+	void ValueToPointer(Pointer*& ptr, const T& value)
+	{
+		if constexpr (std::is_pointer_v<T> && || std::is_same_v<T, std::nullptr_t>) {
+			value = reinterpret_cast<T>(const_cast<Pointer*>(ptr));
+		}
+		else {
+			
+			ptr = reinterpret_cast<Pointer*>(const_cast<T*>(&value));
+		}
+	}
+
+
+	
+	template <typename T>
+	void PointerToValue(const Pointer*& ptr, T& value)
+	{
+
+		if constexpr (std::is_same_v<T, bool>) {
+			
+			uint8_t temp = (*reinterpret_cast<const uint8_t*>(ptr)) & 0x1;
+			value = (temp != 0);
+		}
+		else if constexpr (std::is_pointer_v<T> && || std::is_same_v<T, std::nullptr_t>) {
+			value = reinterpret_cast<T>(const_cast<Pointer*>(ptr));
+		}
+		else {
+			value = *reinterpret_cast<const T*>(ptr);
+		}
+	}
+
+
 }
