@@ -27,7 +27,7 @@ A modern and type-safe C++ wrapper for interoperating with C# code through the *
 
 ### Basic Initialization
 
-```
+```cpp
 #include "Il2CppWrapper.h"
 using namespace Il2CppWrapper;
 
@@ -37,7 +37,7 @@ Domain* domain = Domain::Get();
 
 ### Invoking a Method
 
-```
+```cpp
 Class* klass = Domain::Get()->LookUpClass("UnityEngine", "Debug");
 const Method* logMethod = klass->GetMethodFromName("Log", 1);
 Exception* exc = nullptr;
@@ -48,7 +48,7 @@ Runtime::Invoke(logMethod, nullptr, args, &exc);
 
 ### Working with Arrays
 
-```
+```cpp
 Class* intClass = Domain::Get()->LookUpClass("System", "Int32");
 Array* arr = Array::New(intClass, 10);
 arr->SetAt<int>(0, 42);
@@ -56,7 +56,7 @@ arr->SetAt<int>(0, 42);
 
 ### Reflection
 
-```
+```cpp
 Class::ForEach([](Class* klass) {
     printf("Class: %s.%s\n", klass->GetNamespace(), klass->GetName());
 });
