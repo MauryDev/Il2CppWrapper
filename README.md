@@ -1,32 +1,33 @@
+
 # Il2CppWrapper
 
-Um wrapper C++ moderno e type-safe para interoperar com código C# através da API **Il2Cpp** do Unity. Esta biblioteca fornece uma interface amigável para acessar reflexão, invocar métodos, gerenciar memória e manipular objetos gerenciados do .NET.
+A modern and type-safe C++ wrapper for interoperating with C# code through the **Il2Cpp** API of Unity. This library provides a friendly interface for accessing reflection, invoking methods, managing memory, and manipulating managed .NET objects.
 
-## 🎯 Características Principais
+## 🎯 Key Features
 
-- **Wrapper Type-Safe**: Interface C++ moderna para acesso à API Il2Cpp
-- **Reflexão Completa**: Inspeção de classes, métodos, campos, propriedades e eventos
-- **Invocação Dinâmica**: Chamada de métodos C# a partir de C++
-- **Gerenciamento de Memória**: Suporte a GC, arrays, strings e alocação gerenciada
-- **Threading**: Suporte para multi-threading, thread attachment e stack traces
-- **Debugging**: Integração com debugger, breakpoints e informações de depuração
-- **Atributos Customizados**: Leitura e manipulação de Custom Attributes
-- **Boxing/Unboxing**: Conversão automática entre tipos primitivos e objetos
-- **GCHandles**: Gerenciamento de referências para objetos gerenciados
-- **Interop Natives**: Registro de funções C++ como InternalCall
+- **Type-Safe Wrapper**: Modern C++ interface for Il2Cpp API access
+- **Complete Reflection**: Inspection of classes, methods, fields, properties, and events
+- **Dynamic Invocation**: Calling C# methods from C++
+- **Memory Management**: Support for GC, arrays, strings, and managed allocation
+- **Threading**: Support for multi-threading, thread attachment, and stack traces
+- **Debugging**: Integration with debugger, breakpoints, and debug information
+- **Custom Attributes**: Reading and manipulating Custom Attributes
+- **Boxing/Unboxing**: Automatic conversion between primitive types and objects
+- **GCHandles**: Management of references to managed objects
+- **Native Interop**: Registration of C++ functions as InternalCall
 
-## 📋 Requisitos
+## 📋 Requirements
 
 - Visual Studio 2022+
-- C++17 ou superior
-- Il2Cpp Runtime (incluso no Unity)
-- Windows, Linux ou macOS
+- C++17 or higher
+- Il2Cpp Runtime (included in Unity)
+- Windows, Linux, or macOS
 
 ## 🚀 Quick Start
 
-### Inicialização Básica
+### Basic Initialization
 
-```cpp
+```
 #include "Il2CppWrapper.h"
 using namespace Il2CppWrapper;
 
@@ -34,9 +35,9 @@ Program::Init("AppDomain");
 Domain* domain = Domain::Get();
 ```
 
-### Invocar um Método
+### Invoking a Method
 
-```cpp
+```
 Class* klass = Domain::Get()->LookUpClass("UnityEngine", "Debug");
 const Method* logMethod = klass->GetMethodFromName("Log", 1);
 Exception* exc = nullptr;
@@ -45,23 +46,23 @@ void* args[] = { msg };
 Runtime::Invoke(logMethod, nullptr, args, &exc);
 ```
 
-### Trabalhar com Arrays
+### Working with Arrays
 
-```cpp
+```
 Class* intClass = Domain::Get()->LookUpClass("System", "Int32");
 Array* arr = Array::New(intClass, 10);
 arr->SetAt<int>(0, 42);
 ```
 
-### Reflexão
+### Reflection
 
-```cpp
+```
 Class::ForEach([](Class* klass) {
     printf("Class: %s.%s\n", klass->GetNamespace(), klass->GetName());
 });
 ```
 
-## 📚 Estrutura da API
+## 📚 API Structure
 
 - **Core**: `Pointer`, `Object`, `Class`, `Method`, `Field`, `Property`
 - **Memory**: `Domain`, `Array`, `String`, `GC`, `GCHandle`
@@ -69,8 +70,7 @@ Class::ForEach([](Class* klass) {
 - **Debugging**: `Debugger`, `CustomAttribute`
 - **Runtime**: `Runtime`, `Exception`, `Program`
 
-## 📝 Licença
+## 📝 License
 
 MIT License
 
----
