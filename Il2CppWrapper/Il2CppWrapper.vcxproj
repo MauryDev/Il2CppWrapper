@@ -70,6 +70,12 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(ProjectDir);$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Label="Vcpkg">
+    <VcpkgEnableManifest>true</VcpkgEnableManifest>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -115,6 +121,7 @@
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile />
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -143,13 +150,175 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Il2CppWrapper.cpp" />
-    <ClCompile Include="WindowsDist.cpp" />
+    <ClCompile Include="Il2Cpp\Il2CppComponentHook.cpp" />
+    <ClCompile Include="Il2Cpp\CoreLib\metadata.cpp" />
+    <ClCompile Include="Il2Cpp\ExceptionHandler.cpp" />
+    <ClCompile Include="Il2Cpp\Il2CppCoreTypes.cpp" />
+    <ClCompile Include="Il2Cpp\Il2CppDelegate.cpp" />
+    <ClCompile Include="Il2Cpp\Il2CppEnumerable.cpp" />
+    <ClCompile Include="Il2Cpp\Il2CppTypeHelper.cpp" />
+    <ClCompile Include="Il2Cpp\Il2CppHooking.cpp" />
+    <ClCompile Include="Il2Cpp\Il2CppWrapper.cpp" />
+    <ClCompile Include="Il2Cpp\metadata\ClassInfo.cpp" />
+    <ClCompile Include="Il2Cpp\metadata\CodeGeneration.cpp" />
+    <ClCompile Include="Il2Cpp\metadata\FieldInfo.cpp" />
+    <ClCompile Include="Il2Cpp\metadata\MetadataView.cpp" />
+    <ClCompile Include="Il2Cpp\metadata\MethodInfo.cpp" />
+    <ClCompile Include="Il2Cpp\UnityInterop\metadata.cpp" />
+    <ClCompile Include="Il2Cpp\Unity\InputHelpers.cpp" />
+    <ClCompile Include="Il2Cpp\Unity\Quaternion.cpp" />
+    <ClCompile Include="Il2Cpp\Unity\UnityContext.cpp" />
+    <ClCompile Include="Il2Cpp\Unity\UnityHelpers.cpp" />
+    <ClCompile Include="Il2Cpp\Unity\Vector2.cpp" />
+    <ClCompile Include="Il2Cpp\Unity\Vector3.cpp" />
+    <ClCompile Include="Il2Cpp\Unity\Vector3.h" />
+    <ClCompile Include="Il2Cpp\WindowsDist.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DistCallback.h" />
-    <ClInclude Include="Il2CppWrapper.h" />
-    <ClInclude Include="WindowsDist.h" />
+    <ClInclude Include="Il2Cpp\Il2CppComponentHook.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\metadata.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Collections.Generic\Dictionary`2.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Collections.Generic\ICollection`1.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Collections.Generic\IDictionary`2.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Collections.Generic\IEnumerable`1.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Collections.Generic\IEnumerator`1.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Collections.Generic\IList`1.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Collections.Generic\List`1.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Collections.Generic\Queue`1.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Collections.Generic\Stack`1.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Collections\ICollection.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Collections\IDictionary.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Collections\IEnumerable.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Collections\IEnumerator.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Collections\IList.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.IO\BinaryReader.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.IO\BinaryWriter.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.IO\Directory.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.IO\File.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.IO\MemoryStream.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.IO\Stream.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Reflection\FieldInfo.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Reflection\MethodBase.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Reflection\MethodInfo.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Reflection\PropertyInfo.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Threading.Tasks\Task.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Threading.Tasks\Task`1.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Threading\CancellationToken.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Threading\Thread.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Action.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Action`1.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Activator.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Array.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Attribute.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Boolean.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Byte.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Char.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Convert.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\DateTime.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\DateTimeOffset.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Decimal.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Delegate.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Double.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Environment.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\EventHandler.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Exception.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Func`1.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Func`2.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Guid.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\IComparable.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\IComparable`1.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\IDisposable.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\IEquatable`1.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Int16.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Int32.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Int64.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Math.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Nullable`1.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Object.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Predicate`1.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Random.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\SByte.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Single.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\String.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\TimeSpan.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Type.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\UInt16.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\UInt32.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\UInt64.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Version.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Void.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\System.Core.dll\System.Collections.Generic\HashSet`1.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\System.dll\System.Collections.Generic\LinkedList`1.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\System.dll\System\Uri.h" />
+    <ClInclude Include="Il2Cpp\CoreLib\System.Net.Http.dll\System.Net.Http\HttpResponseMessage.h" />
+    <ClInclude Include="Il2Cpp\DistCallback.h" />
+    <ClInclude Include="Il2Cpp\ExceptionHandler.h" />
+    <ClInclude Include="Il2Cpp\Il2CppCoreTypes.h" />
+    <ClInclude Include="Il2Cpp\Il2CppDelegate.h" />
+    <ClInclude Include="Il2Cpp\Il2CppHooking.h" />
+    <ClInclude Include="Il2Cpp\Il2CppEnumerable.h" />
+    <ClInclude Include="Il2Cpp\Il2CppWrapper.h" />
+    <ClInclude Include="Il2Cpp\Il2CppTypeHelper.h" />
+    <ClInclude Include="Il2Cpp\metadata\ClassInfo.h" />
+    <ClInclude Include="Il2Cpp\metadata\CodeGeneration.h" />
+    <ClInclude Include="Il2Cpp\metadata\FieldGen.h" />
+    <ClInclude Include="Il2Cpp\metadata\FieldInfo.h" />
+    <ClInclude Include="Il2Cpp\metadata\MetadataView.h" />
+    <ClInclude Include="Il2Cpp\metadata\MethodGen.h" />
+    <ClInclude Include="Il2Cpp\metadata\MethodInfo.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\metadata.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\Unity.TextMeshPro.dll\TMPro\TextMeshProUGUI.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\Unity.TextMeshPro.dll\TMPro\TMP_Text.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.AnimationModule.dll\UnityEngine\Animation.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.AnimationModule.dll\UnityEngine\Animator.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.AudioModule.dll\UnityEngine\AudioClip.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.AudioModule.dll\UnityEngine\AudioSource.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine.SceneManagement\Scene.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Application.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Behaviour.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Camera.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Color.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Component.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Coroutine.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Debug.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\GameObject.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\LayerMask.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Material.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\MeshFilter.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\MeshRenderer.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\MonoBehaviour.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Object.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Quaternion.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Renderer.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Resources.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\ScriptableObject.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Shader.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Sprite.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Texture.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Texture2D.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Time.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Transform.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Vector2.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Vector3.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\WaitForSeconds.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.InputLegacyModule.dll\UnityEngine\Input.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.PhysicsModule.dll\UnityEngine\BoxCollider.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.PhysicsModule.dll\UnityEngine\CapsuleCollider.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.PhysicsModule.dll\UnityEngine\Collider.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.PhysicsModule.dll\UnityEngine\Physics.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.PhysicsModule.dll\UnityEngine\RaycastHit.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.PhysicsModule.dll\UnityEngine\Rigidbody.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.PhysicsModule.dll\UnityEngine\SphereCollider.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.UI.dll\UnityEngine.UI\Button.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.UI.dll\UnityEngine.UI\Image.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.UI.dll\UnityEngine.UI\Text.h" />
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.UIModule.dll\UnityEngine\Canvas.h" />
+    <ClInclude Include="Il2Cpp\Unity\InputHelpers.h" />
+    <ClInclude Include="Il2Cpp\Unity\Quaternion.h" />
+    <ClInclude Include="Il2Cpp\Unity\UnityContext.h" />
+    <ClInclude Include="Il2Cpp\Unity\UnityHelpers.h" />
+    <ClInclude Include="Il2Cpp\Unity\Vector2.h" />
+    <ClInclude Include="Il2Cpp\WindowsDist.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

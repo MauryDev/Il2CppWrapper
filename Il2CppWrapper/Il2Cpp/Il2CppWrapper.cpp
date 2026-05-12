@@ -1,4 +1,5 @@
 #include "Il2CppWrapper.h"
+#include <unordered_map>
 namespace Il2CppWrapper {
     void Initialize(Core::Callbacks& callbacks)
     {
@@ -280,39 +281,102 @@ namespace Il2CppWrapper {
 
     
 
-    bool Pointer::isValid() const
+    bool Pointer::isValid()
     {
         return this != nullptr;
     }
 
-    Pointer* Pointer::add(size_t offset) const
+    Pointer* Pointer::add(size_t offset)
     {
         return reinterpret_cast<Pointer*>(reinterpret_cast<uintptr_t>(this) + offset);
     }
-    Pointer* Pointer::operator[](size_t offset) const
+    Pointer* Pointer::operator[](size_t offset)
     {
         return add(offset);
     }
-    Pointer::operator bool() const
+    Pointer::operator bool()
     {
         return isValid();
     }
-    bool Pointer::operator!() const
+    bool Pointer::operator!()
     {
         return !isValid();
     }
-    bool Pointer::operator==(const Pointer* other) const
+    bool Pointer::operator==(const Pointer* other)
     {
         return Equals(other);
     }
-    bool Pointer::Equals(const Pointer* other) const
+    bool Pointer::Equals(const Pointer* other)
     {
         return this == other;
     }
-    const Image* Image::getCorlib()
+    Image* Image::getCorlib()
     {
         return il2cpp_get_corlib();
     }
+    Image* Image::GetAssemblyCSharp()
+    {
+        
+        return Get("Assembly-CSharp");
+    }
+    Image* Image::GetAssemblyCSharpFirstPass() {
+        return Get("Assembly-CSharp-firstpass");
+    }
+
+    Image* Image::GetUnityEngineCoreModule() {
+        return Get("UnityEngine.CoreModule");
+    }
+
+    Image* Image::GetUnityEnginePhysicsModule() {
+        return Get("UnityEngine.PhysicsModule");
+    }
+
+    Image* Image::GetUnityEngineAudioModule() {
+        return Get("UnityEngine.AudioModule");
+    }
+
+    Image* Image::GetUnityEngineUIModule() {
+        return Get("UnityEngine.UIModule");
+    }
+
+    Image* Image::GetUnityEngineAnimationModule() {
+        return Get("UnityEngine.AnimationModule");
+    }
+
+    Image* Image::GetUnityEngineParticleSystemModule() {
+        return Get("UnityEngine.ParticleSystemModule");
+    }
+
+    Image* Image::GetUnityEngineTerrainModule() {
+        return Get("UnityEngine.TerrainPhysicsModule");
+    }
+
+    Image* Image::GetUnityEngineJSONSerializeModule() {
+        return Get("UnityEngine.JSONSerializeModule");
+    }
+
+    Image* Image::GetUnityEngineAssetBundleModule() {
+        return Get("UnityEngine.AssetBundleModule");
+    }
+
+    Image* Image::GetUnityEngineIMGUIModule() {
+        return Get("UnityEngine.IMGUIModule");
+    }
+
+    Image* Image::GetUnityEngineNetworkingModule() {
+        return Get("UnityEngine.NetworkingModule");
+    }
+
+    Image* Image::GetUnityEngineInputModule() {
+        return Get("UnityEngine.InputModule");
+    }
+
+    Image* Image::GetUnityEditor() {
+        return Get("UnityEditor");
+    }
+
+
+
     ManagedPointer* ManagedPointer::Alloc(size_t n)
     {
         return il2cpp_alloc(n);
@@ -398,13 +462,13 @@ namespace Il2CppWrapper {
             memset(data, 0, GetByteLength());
     }
 
-    const Image* Assembly::GetImage() const
+    Image* Assembly::GetImage()
     {
         return il2cpp_assembly_get_image(this);
     }
 
 
-    size_t Class::GetBitmapSize() const
+    size_t Class::GetBitmapSize()
     {
         return il2cpp_class_get_bitmap_size(this);
     }
@@ -424,16 +488,20 @@ namespace Il2CppWrapper {
         il2cpp_class_for_each(klassReportFunc, userData);
 
     }
-    const Type* Class::GetEnumBaseType() { return il2cpp_class_enum_basetype(this); }
-    bool Class::IsInited() const { return il2cpp_class_is_inited(this); }
-    bool Class::IsGeneric() const { return il2cpp_class_is_generic(this); }
-    bool Class::IsInflated() const { return il2cpp_class_is_inflated(this); }
+    Type* Class::GetEnumBaseType() { return il2cpp_class_enum_basetype(this); }
+    bool Class::IsInited() { return il2cpp_class_is_inited(this); }
+    bool Class::IsGeneric() { return il2cpp_class_is_generic(this); }
+    bool Class::IsInflated() { return il2cpp_class_is_inflated(this); }
     bool Class::IsAssignableFrom(Class* oklass) { return il2cpp_class_is_assignable_from(this, oklass); }
     bool Class::IsSubclassOf(Class* klassc, bool check_interfaces) { return il2cpp_class_is_subclass_of(this, klassc, check_interfaces); }
     bool Class::HasParent(Class* klassc) { return il2cpp_class_has_parent(this, klassc); }
-    Class* Class::FromIl2CppType(const Type* type) { return il2cpp_class_from_il2cpp_type(type); }
-    Class* Class::FromName(const Image* image, const char* namespaze, const char* name) { return il2cpp_class_from_name(image, namespaze, name); }
+    Class* Class::FromIl2CppType(Type* type) { return il2cpp_class_from_il2cpp_type(type); }
+    Class* Class::FromName(Image* image, const char* namespaze, const char* name) { return il2cpp_class_from_name(image, namespaze, name); }
     Class* Class::FromSystemType(ReflectionType* type) { return il2cpp_class_from_system_type(type); }
+    ReflectionType* Class::ToSystemType()
+    {
+        return (ReflectionType*)this->GetType()->getObject();
+    }
     Class* Class::GetElementClass() { return il2cpp_class_get_element_class(this); }
 
     const Event* Class::GetEvents(void** iter) { return il2cpp_class_get_events(this, iter); }
@@ -442,44 +510,44 @@ namespace Il2CppWrapper {
         return CollectMetadata(&Class::GetEvents);
     }
     Field* Class::GetFields(void** iter) { return il2cpp_class_get_fields(this, iter); }
-    std::vector<const Field*> Class::GetFieldsList()
+    std::vector<Field*> Class::GetFieldsList()
     {
         return CollectMetadata(&Class::GetFields);
 
     }
     Class* Class::GetNestedTypes(void** iter) { return il2cpp_class_get_nested_types(this, iter); }
-    std::vector<const Class*> Class::GetNestedTypesList()
+    std::vector<Class*> Class::GetNestedTypesList()
     {
         return CollectMetadata(&Class::GetNestedTypes);
     }
     Class* Class::GetInterfaces(void** iter) { return il2cpp_class_get_interfaces(this, iter); }
-    std::vector<const Class*> Class::GetInterfacesList()
+    std::vector<Class*> Class::GetInterfacesList()
     {
         return CollectMetadata(&Class::GetInterfaces);
     }
-    const Property* Class::GetProperties(void** iter) { return il2cpp_class_get_properties(this, iter); }
-    std::vector<const Property*> Class::GetPropertiesList()
+    Property* Class::GetProperties(void** iter) { return il2cpp_class_get_properties(this, iter); }
+    std::vector<Property*> Class::GetPropertiesList()
     {
         return CollectMetadata(&Class::GetProperties);
     }
-    const Method* Class::GetMethods(void** iter) { return il2cpp_class_get_methods(this, iter); }
+    Method* Class::GetMethods(void** iter) { return il2cpp_class_get_methods(this, iter); }
 
-    std::vector<const Method*> Class::GetMethodsList()
+    std::vector<Method*> Class::GetMethodsList()
     {
         return CollectMetadata(&Class::GetMethods);
     }
 
-    const Property* Class::GetPropertyFromName(const char* name) { return il2cpp_class_get_property_from_name(this, name); }
+    Property* Class::GetPropertyFromName(const char* name) { return il2cpp_class_get_property_from_name(this, name); }
     Field* Class::GetFieldFromName(const char* name) { return il2cpp_class_get_field_from_name(this, name); }
-    const Method* Class::GetMethodFromName(const char* name, int argsCount) { return il2cpp_class_get_method_from_name(this, name, argsCount); }
+    Method* Class::GetMethodFromName(const char* name, int argsCount) { return il2cpp_class_get_method_from_name(this, name, argsCount); }
 
     const char* Class::GetName() { return il2cpp_class_get_name(this); }
     const char* Class::GetNamespace() { return il2cpp_class_get_namespace(this); }
     Class* Class::GetParent() { return il2cpp_class_get_parent(this); }
     Class* Class::GetDeclaringType() { return il2cpp_class_get_declaring_type(this); }
     int32_t Class::GetInstanceSize() { return il2cpp_class_instance_size(this); }
-    size_t Class::GetNumFields() const { return il2cpp_class_num_fields(this); }
-    bool Class::IsValueType() const { return il2cpp_class_is_valuetype(this); }
+    size_t Class::GetNumFields() { return il2cpp_class_num_fields(this); }
+    bool Class::IsValueType() { return il2cpp_class_is_valuetype(this); }
     ValueSize Class::GetValueSize() {
 
         uint32_t align = 0;
@@ -487,29 +555,29 @@ namespace Il2CppWrapper {
         return { size, align };
 
     }
-    bool Class::IsBlittable() const { return il2cpp_class_is_blittable(this); }
-    int Class::GetFlags() const { return il2cpp_class_get_flags(this); }
-    bool Class::IsAbstract() const { return il2cpp_class_is_abstract(this); }
-    bool Class::IsInterface() const { return il2cpp_class_is_interface(this); }
-    int Class::GetArrayElementSize() const { return il2cpp_class_array_element_size(this); }
-    const Type* Class::GetType() { return il2cpp_class_get_type(this); }
+    bool Class::IsBlittable() { return il2cpp_class_is_blittable(this); }
+    int Class::GetFlags() { return il2cpp_class_get_flags(this); }
+    bool Class::IsAbstract() { return il2cpp_class_is_abstract(this); }
+    bool Class::IsInterface() { return il2cpp_class_is_interface(this); }
+    int Class::GetArrayElementSize() { return il2cpp_class_array_element_size(this); }
+    Type* Class::GetType() { return il2cpp_class_get_type(this); }
     uint32_t Class::GetTypeToken() { return il2cpp_class_get_type_token(this); }
     bool Class::HasAttribute(Class* attr_class) { return il2cpp_class_has_attribute(this, attr_class); }
     bool Class::HasReferences() { return il2cpp_class_has_references(this); }
-    bool Class::IsEnum() const { return il2cpp_class_is_enum(this); }
-    const Image* Class::GetImage() { return il2cpp_class_get_image(this); }
-    const char* Class::GetAssemblyName() const { return il2cpp_class_get_assemblyname(this); }
-    int Class::GetRank() const { return il2cpp_class_get_rank(this); }
-    uint32_t Class::GetDataSize() const { return il2cpp_class_get_data_size(this); }
-    void* Class::GetStaticFieldData() const { return il2cpp_class_get_static_field_data(this); }
+    bool Class::IsEnum() { return il2cpp_class_is_enum(this); }
+    Image* Class::GetImage() { return il2cpp_class_get_image(this); }
+    const char* Class::GetAssemblyName() { return il2cpp_class_get_assemblyname(this); }
+    int Class::GetRank() { return il2cpp_class_get_rank(this); }
+    uint32_t Class::GetDataSize() { return il2cpp_class_get_data_size(this); }
+    void* Class::GetStaticFieldData() { return il2cpp_class_get_static_field_data(this); }
 
-    bool Class::IsString() const
+    bool Class::IsString()
     {
         auto that = (Class*)this;
         return strcmp(that->GetName(), "String") == 0 && strcmp(that->GetNamespace(), "System") == 0;
     }
 
-    bool Class::IsInt32() const
+    bool Class::IsInt32()
     {
         auto that = (Class*)this;
         return strcmp(that->GetName(), "Int32") == 0 && strcmp(that->GetNamespace(), "System") == 0;
@@ -556,27 +624,27 @@ namespace Il2CppWrapper {
         return current;
     }
 
-    Domain* Domain::Get()
+    Domain* Domain::GetCurrent()
     {
         return il2cpp_domain_get();
     }
 
-    const Assembly* Domain::OpenAssembly(const char* name)
+    Assembly* Domain::OpenAssembly(const char* name)
     {
         return il2cpp_domain_assembly_open(this, name);
     }
 
-    std::span<const Assembly*> Domain::GetAssembliesList() const
+    std::span<Assembly*> Domain::GetAssembliesList()
     {
         size_t size = 0;
-        const Assembly** assemblies = il2cpp_domain_get_assemblies(this, &size);
+        Assembly** assemblies = il2cpp_domain_get_assemblies(this, &size);
 
         if (!assemblies || size == 0) return {};
 
-        return std::span<const Assembly*>(assemblies, assemblies + size);
+        return std::span<Assembly*>(assemblies, assemblies + size);
     }
 
-    const Image* Domain::GetCorlib()
+    Image* Domain::GetCorlib()
     {
         return Image::getCorlib();
     }
@@ -596,21 +664,21 @@ namespace Il2CppWrapper {
         il2cpp_raise_exception(this);
     }
 
-    Exception* Exception::FromNameMsg(const Image* image, const char* name_space, const char* name, const char* msg)
+    Exception* Exception::Create(Image* image, const char* name_space, const char* name, const char* msg)
     {
         return il2cpp_exception_from_name_msg(image, name_space, name, msg);
     }
-    Exception* Exception::ArgumentNull(const char* arg)
+    Exception* Exception::CreateArgumentNull(const char* arg)
     {
         return il2cpp_get_exception_argument_null(arg);
     }
-    std::string Exception::getMessage() const
+    std::string Exception::getMessage()
     {
         char buffer[1024];
         il2cpp_format_exception(this, buffer, sizeof(buffer));
         return std::string(buffer);
     }
-    std::string Exception::GetStackTrace() const
+    std::string Exception::GetStackTrace()
     {
         char buffer[4096];
         il2cpp_format_stack_trace(this, buffer, sizeof(buffer));
@@ -620,7 +688,7 @@ namespace Il2CppWrapper {
     {
         il2cpp_unhandled_exception(this);
     }
-    NativeStackTrace Exception::GetNativeStackTrace() const
+    NativeStackTrace Exception::GetNativeStackTrace()
     {
         NativeStackTrace result;
         ManagedPointer* addresses = nullptr;
@@ -642,7 +710,7 @@ namespace Il2CppWrapper {
 
         return result;
     }
-    std::string Exception::ToString() const
+    std::string Exception::ToString()
     {
         return getMessage() + "\n" + GetStackTrace();
     }
@@ -654,7 +722,7 @@ namespace Il2CppWrapper {
     {
         return il2cpp_field_get_offset(this);
     }
-    const Type* Field::GetType()
+    Type* Field::GetType()
     {
         return il2cpp_field_get_type(this);
     }
@@ -665,6 +733,10 @@ namespace Il2CppWrapper {
     bool Field::IsLiteral()
     {
         return il2cpp_field_is_literal(this);
+    }
+    const char* Field::GetName()
+    {
+        return il2cpp_field_get_name(this);
     }
     bool Field::HasAttribute(Class* attr_class)
     {
@@ -705,7 +777,7 @@ namespace Il2CppWrapper {
         return il2cpp_field_get_object(this, refclass);
     }
 
-    const Field* Field::FromReflection(ReflectionField* reflectionField)
+    Field* Field::FromReflection(ReflectionField* reflectionField)
     {
         return il2cpp_field_get_from_reflection(reflectionField);
     }
@@ -788,7 +860,7 @@ namespace Il2CppWrapper {
     {
         return il2cpp_gchandle_new_weakref(obj, track_resurrection);
     }
-    Object* GCHandle::GetTarget() const
+    Object* GCHandle::GetTarget()
     {
         if (!this->isValid()) return nullptr;
         return il2cpp_gchandle_get_target((GCHandle*)this);
@@ -849,82 +921,82 @@ namespace Il2CppWrapper {
             il2cpp_unity_liveness_free_struct(this);
         }
     }
-    const char* Method::GetName() const
+    const char* Method::GetName()
     {
         return il2cpp_method_get_name(this);
     }
-    Class* Method::GetDeclaringType() const
+    Class* Method::GetDeclaringType()
     {
         return il2cpp_method_get_declaring_type(this);
     }
-    Class* Method::GetClass() const
+    Class* Method::GetClass()
     {
         return il2cpp_method_get_class(this);
     }
-    const Type* Method::GetReturnType() const
+    Type* Method::GetReturnType()
     {
         return il2cpp_method_get_return_type(this);
     }
-    uint32_t Method::GetToken() const
+    uint32_t Method::GetToken()
     {
         return il2cpp_method_get_token(this);
     }
-    MethodFlags Method::GetFlags() const
+    MethodFlags Method::GetFlags()
     {
         MethodFlags ret{};
-        ret.flags = il2cpp_method_get_flags(this, &ret.implementationFlags);
+        ret.flags = (MethodFlagsEnum)il2cpp_method_get_flags(this, &ret.implementationFlags);
         return ret;
     }
-    bool Method::IsGeneric() const
+    bool Method::IsGeneric()
     {
         return il2cpp_method_is_generic(this);
     }
-    bool Method::IsInflated() const
+    bool Method::IsInflated()
     { 
         return il2cpp_method_is_inflated(this);
     }
-    bool Method::IsInstance() const
+    bool Method::IsInstance()
     {
         return il2cpp_method_is_instance(this);
     }
-    uint32_t Method::GetParamCount() const
+    uint32_t Method::GetParamCount()
     {
         return il2cpp_method_get_param_count(this);
     }
-    const Type* Method::GetParamType(uint32_t index) const
+    Type* Method::GetParamType(uint32_t index)
     {
         return il2cpp_method_get_param(this, index);
     }
-    const char* Method::GetParamName(uint32_t index) const
+    const char* Method::GetParamName(uint32_t index)
     {
         return il2cpp_method_get_param_name(this, index);
     }
-    bool Method::HasAttribute(Class* attr_class) const
+    bool Method::HasAttribute(Class* attr_class)
     {
         return il2cpp_method_has_attribute(this, attr_class);
     }
-    ReflectionMethod* Method::GetReflectionObject(Class* refclass) const
+    ReflectionMethod* Method::GetReflectionObject(Class* refclass)
     {
         return il2cpp_method_get_object(this, refclass);
     }
-    const Method* Method::FromReflection(const ReflectionMethod* reflectionMethod)
+    Method* Method::FromReflection(ReflectionMethod* reflectionMethod)
     {
         return il2cpp_method_get_from_reflection(reflectionMethod);
     }
-    bool Method::IsStatic() const
+    bool Method::IsStatic()
     {
         return !IsInstance();
     }
-    std::string Method::GetFullName() const
+    std::string Method::GetFullName()
     {
         return GetDeclaringType()->GetFullName() + "::" + GetName();
     }
-    void* Method::GetNativePointer() const
+    void* Method::GetNativePointer()
     {
         if (!isValid()) return nullptr;
         return *(void**)((uintptr_t)this);
     }
-    std::vector<ParameterInfo> Method::GetParameters() const
+    std::vector<ParameterInfo> Method::GetParameters()
     {
         std::vector<ParameterInfo> params;
         uint32_t count = GetParamCount();
@@ -938,70 +1010,70 @@ namespace Il2CppWrapper {
     {
         return Runtime::Invoke(this,obj, (void**)args.data(), exc);
     }
-    const char* Property::GetName() const
+    const char* Property::GetName()
     {
         return il2cpp_property_get_name((Property*)this);
     }
-    Class* Property::GetParent() const
+    Class* Property::GetParent()
     {
         return il2cpp_property_get_parent((Property*)this);
     }
-    uint32_t Property::GetFlags() const
+    uint32_t Property::GetFlags()
     {
         return il2cpp_property_get_flags((Property*)this);
     }
-    const Method* Property::GetGetMethod() const
+    Method* Property::GetGetMethod()
     {
         return il2cpp_property_get_get_method((Property*)this);
     }
-    const Method* Property::GetSetMethod() const
+    Method* Property::GetSetMethod()
     {
         return il2cpp_property_get_set_method((Property*)this);
     }
-    bool Property::CanRead() const
+    bool Property::CanRead()
     {
         return GetGetMethod() != nullptr;
     }
-    bool Property::CanWrite() const
+    bool Property::CanWrite()
     {
         return GetSetMethod() != nullptr;
     }
-    Pointer* Property::GetValueImpl(Pointer* that)
+    Object* Property::GetValueImpl(Pointer* that)
     {
-        Method* getMethod = (Method*)GetGetMethod();
+        Method* getMethod = GetGetMethod();
         if (getMethod->isValid()) {
-            return getMethod->Invoke(that, {});
+            return getMethod->Call(that);
            
         }
         return nullptr;
     }
-    void Property::SetValueImpl(Pointer* that, Pointer* value) const
+    void Property::SetValueImpl(Pointer* that, Pointer* value)
     {
 
-        Method* getMethod = (Method*)GetGetMethod();
+        Method* getMethod = GetGetMethod();
         if (getMethod->isValid()) {
             Pointer* args[] = {value};
-            getMethod->Invoke(that, args);
+            getMethod->Call(that, value);
 
         }
        
 
 
     }
-    Class* Object::GetClass() const
+    Class* Object::GetClass()
     {
         return il2cpp_object_get_class(this);
     }
-    uint32_t Object::GetSize() const
+    uint32_t Object::GetSize()
     {
         return il2cpp_object_get_size(this);
     }
-    const Method* Object::GetVirtualMethod(const Method* method) const
+    Method* Object::GetVirtualMethod(Method* method)
     {
         return il2cpp_object_get_virtual_method(this, method);
     }
 
-    Object* Object::New(const Class* klass)
+    Object* Object::New(Class* klass)
     {
         return il2cpp_object_new(klass);
     }
@@ -1014,6 +1086,16 @@ namespace Il2CppWrapper {
     Object* Object::BoxImpl(Class* klass, void* value)
     {
         return il2cpp_value_box(klass,value);
+    }
+
+    Type* Object::GetType()
+    {
+        return GetClass()->GetType();
+    }
+
+    Pointer* Object::UnboxIfValueType(Class* klass)
+    {
+        return Struct::UnboxIfValueType(klass, this);
     }
 
 
@@ -1056,11 +1138,11 @@ namespace Il2CppWrapper {
     {
         _obj->Exit();
     }
-    Object* Runtime::Invoke(const Method* method, void* obj, void** params, Exception** exc)
+    Object* Runtime::Invoke(Method* method, void* obj, void** params, Exception** exc)
     {
         return il2cpp_runtime_invoke(method, obj, params, exc);
     }
-    Object* Runtime::InvokeConvertArgs(const Method* method, void* obj, Object** params, int paramCount, Exception** exc)
+    Object* Runtime::InvokeConvertArgs(Method* method, void* obj, Object** params, int paramCount, Exception** exc)
     {
         return il2cpp_runtime_invoke_convert_args(method, obj, params, paramCount, exc);
     }
@@ -1100,6 +1182,14 @@ namespace Il2CppWrapper {
     {
         return il2cpp_string_new_utf16(text, len);
     }
+    String* String::FromStdString(const std::string& str)
+    {
+        return New(str.data(), static_cast<uint32_t>(str.size()));
+    }
+    String* String::FromStdWString(const std::u16string& str)
+    {
+        return NewUTF16((Char*)str.data(), static_cast<uint32_t>(str.size()));
+    }
     String* String::Intern()
     {
         return il2cpp_string_intern(this);
@@ -1115,7 +1205,6 @@ namespace Il2CppWrapper {
         if (!this->isValid()) return "";
 
         auto buffer = il2cpp_string_chars((String*)this);
-        std::span<Char> u16(buffer, buffer + Length());
 
        
         return callbacks.fn_toStrFromWCharString(buffer, Length());
@@ -1189,24 +1278,24 @@ namespace Il2CppWrapper {
     
 
 
-    Object* Type::getObject() const
+    ReflectionType* Type::getObject()
     {
-        return il2cpp_type_get_object(this);
+        return (ReflectionType*)il2cpp_type_get_object(this);
     }
 
-    int Type::GetTypeEnum() const
+    int Type::GetTypeEnum()
     {
         return il2cpp_type_get_type(this);
     }
 
 
-    Class* Type::GetClass() const
+    Class* Type::GetClass()
     {
         return il2cpp_type_get_class_or_element_class(this);
     }
 
 
-    std::string Type::GetName() const
+    std::string Type::GetName()
     {
         char* name = il2cpp_type_get_name(this);
         
@@ -1215,7 +1304,7 @@ namespace Il2CppWrapper {
         return s;
     }
 
-    std::string Type::GetReflectionName() const
+    std::string Type::GetReflectionName()
     {
         char* name = il2cpp_type_get_reflection_name(this);
         std::string s(name);
@@ -1223,7 +1312,7 @@ namespace Il2CppWrapper {
         return s;
     }
 
-    std::string Type::GetAssemblyQualifiedName() const
+    std::string Type::GetAssemblyQualifiedName()
     {
         char* name = il2cpp_type_get_assembly_qualified_name(this);
         std::string s(name);
@@ -1231,29 +1320,29 @@ namespace Il2CppWrapper {
         return s;
     }
 
-    uint32_t Type::GetAttrs() const
+    uint32_t Type::GetAttrs()
     {
         return il2cpp_type_get_attrs(this);
     }
 
-    bool Type::IsByRef() const
+    bool Type::IsByRef()
     {
         return il2cpp_type_is_byref(this);
     }
 
-    bool Type::IsStatic() const {
+    bool Type::IsStatic() {
         return il2cpp_type_is_static(this);
     }
-    bool Type::IsPointer() const {
+    bool Type::IsPointer() {
         return il2cpp_type_is_pointer_type(this);
     }
 
-    bool Type::Equals(const Type* other) const
+    bool Type::Equals(Type* other)
     {
         return il2cpp_type_equals(this, other);
     }
 
-    const Assembly* Image::GetAssembly() {
+    Assembly* Image::GetAssembly() {
         return il2cpp_image_get_assembly(this);
     }
 
@@ -1268,7 +1357,7 @@ namespace Il2CppWrapper {
     }
 
     // O método principal (Main) se houver (geralmente nulo em DLLs)
-    const Method* Image::GetEntryPoint() {
+    Method* Image::GetEntryPoint() {
         return il2cpp_image_get_entry_point(this);
     }
 
@@ -1278,13 +1367,17 @@ namespace Il2CppWrapper {
         return il2cpp_image_get_class_count(this);
     }
 
-    const Class* Image::GetClass(size_t index) {
+    Class* Image::GetClass(size_t index) {
         return il2cpp_image_get_class(this, index);
     }
 
-    // Helper amigável para obter todas as classes do módulo
-    std::vector<const Class*> Image::GetClasses() {
-        std::vector<const Class*> classes;
+    Class* Image::GetClass(const char* namespaze, const char* name)
+    {
+        return Class::FromName(this,namespaze, name);
+    }
+
+    std::vector< Class*> Image::GetClasses() {
+        std::vector< Class*> classes;
         size_t count = GetClassCount();
         classes.reserve(count);
         for (size_t i = 0; i < count; i++) {
@@ -1292,6 +1385,9 @@ namespace Il2CppWrapper {
         }
         return classes;
     }
+
+   
+
     MemoryInformation* MemoryInformation::New()
     {
         return il2cpp_capture_memory_snapshot();
@@ -1325,7 +1421,7 @@ namespace Il2CppWrapper {
         il2cpp_register_debugger_agent_transport(transport);
     }
 
-    bool DebugMetadata::GetMethodInfo(const Method* method, MethodDebugInfo* debugInfo)
+    bool DebugMetadata::GetMethodInfo(Method* method, MethodDebugInfo* debugInfo)
     {
         if (!method || !debugInfo) return false;
         return il2cpp_debug_get_method_info(method, debugInfo);
@@ -1346,11 +1442,11 @@ namespace Il2CppWrapper {
         return il2cpp_custom_attrs_from_class(klass);
     }
 
-    CustomAttribute* CustomAttribute::FromMethod(const Method* method) {
+    CustomAttribute* CustomAttribute::FromMethod(Method* method) {
         return il2cpp_custom_attrs_from_method(method);
     }
 
-    CustomAttribute* CustomAttribute::FromField(const Field* field) {
+    CustomAttribute* CustomAttribute::FromField(Field* field) {
         return il2cpp_custom_attrs_from_field(field);
     }
 
@@ -1482,11 +1578,11 @@ namespace Il2CppWrapper {
         il2cpp_set_memory_callbacks(this);
     }
 
-    void Class::GetNameChunked(const Type* type, void(*callback)(void*, void*), void* userData) {
+    void Class::GetNameChunked(Type* type, void(*callback)(void*, void*), void* userData) {
         il2cpp_type_get_name_chunked(type, callback, userData);
     }
 
-    Class* Class::FromType(const Type* type) {
+    Class* Class::FromType(Type* type) {
         return il2cpp_class_from_type(type);
     }
 
@@ -1519,9 +1615,9 @@ namespace Il2CppWrapper {
         if (ptr) ptr->Free();
     }
 
-    MemoryInformation* MemoryInformationGuard::MemoryInformationGuard::get() const { return ptr; }
-    MemoryInformation* MemoryInformationGuard::MemoryInformationGuard::operator->() const { return ptr; }
-    MemoryInformation& MemoryInformationGuard::MemoryInformationGuard::operator*() const { return *ptr; }
+    MemoryInformation* MemoryInformationGuard::MemoryInformationGuard::get() { return ptr; }
+    MemoryInformation* MemoryInformationGuard::MemoryInformationGuard::operator->() { return ptr; }
+    MemoryInformation& MemoryInformationGuard::MemoryInformationGuard::operator*() { return *ptr; }
 
     MemoryInformation* MemoryInformationGuard::release() {
         auto temp = ptr;
@@ -1534,7 +1630,7 @@ namespace Il2CppWrapper {
         ptr = p;
     }
 
-    MemoryInformationGuard::operator bool() const { return ptr != nullptr; }
+    MemoryInformationGuard::operator bool() { return ptr != nullptr; }
 
 
     CustomAttributeGuard::CustomAttributeGuard() : ptr(nullptr) {}
@@ -1554,9 +1650,9 @@ namespace Il2CppWrapper {
         if (ptr) ptr->Free();
     }
 
-    CustomAttribute* CustomAttributeGuard::get() const { return ptr; }
-    CustomAttribute* CustomAttributeGuard::operator->() const { return ptr; }
-    CustomAttribute& CustomAttributeGuard::operator*() const { return *ptr; }
+    CustomAttribute* CustomAttributeGuard::get() { return ptr; }
+    CustomAttribute* CustomAttributeGuard::operator->() { return ptr; }
+    CustomAttribute& CustomAttributeGuard::operator*() { return *ptr; }
 
     CustomAttribute* CustomAttributeGuard::release() {
         auto temp = ptr;
@@ -1569,7 +1665,7 @@ namespace Il2CppWrapper {
         ptr = p;
     }
 
-    CustomAttributeGuard::operator bool() const { return ptr != nullptr; }
+    CustomAttributeGuard::operator bool() { return ptr != nullptr; }
 
 
     ManagedPointerGuard::ManagedPointerGuard() : ptr(nullptr) {}
@@ -1589,8 +1685,8 @@ namespace Il2CppWrapper {
         if (ptr) ptr->Free();
     }
 
-    ManagedPointer* ManagedPointerGuard::get() const { return ptr; }
-    ManagedPointer* ManagedPointerGuard::operator->() const { return ptr; }
+    ManagedPointer* ManagedPointerGuard::get() { return ptr; }
+    ManagedPointer* ManagedPointerGuard::operator->() { return ptr; }
 
    
 
@@ -1605,7 +1701,7 @@ namespace Il2CppWrapper {
         ptr = p;
     }
 
-    ManagedPointerGuard::operator bool() const { return ptr != nullptr; }
+    ManagedPointerGuard::operator bool() { return ptr != nullptr; }
 
 
     GCPointerFixedGuard::GCPointerFixedGuard() : ptr(nullptr) {}
@@ -1625,8 +1721,8 @@ namespace Il2CppWrapper {
         if (ptr) ptr->Free();
     }
 
-    GCPointerFixed* GCPointerFixedGuard::get() const { return ptr; }
-    GCPointerFixed* GCPointerFixedGuard::operator->() const { return ptr; }
+    GCPointerFixed* GCPointerFixedGuard::get() { return ptr; }
+    GCPointerFixed* GCPointerFixedGuard::operator->() { return ptr; }
 
   
 
@@ -1641,7 +1737,7 @@ namespace Il2CppWrapper {
         ptr = p;
     }
 
-    GCPointerFixedGuard::operator bool() const { return ptr != nullptr; }
+    GCPointerFixedGuard::operator bool() { return ptr != nullptr; }
 
     GCHandleGuard::GCHandleGuard() : ptr(nullptr) {}
 
@@ -1660,10 +1756,10 @@ namespace Il2CppWrapper {
         if (ptr) ptr->Free();
     }
 
-    GCHandle* GCHandleGuard::get() const { return ptr; }
-    GCHandle* GCHandleGuard::operator->() const { return ptr; }
+    GCHandle* GCHandleGuard::get() { return ptr; }
+    GCHandle* GCHandleGuard::operator->() { return ptr; }
 
-    Object* GCHandleGuard::GetTarget() const { return ptr ? ptr->GetTarget() : nullptr; }
+    Object* GCHandleGuard::GetTarget() { return ptr ? ptr->GetTarget() : nullptr; }
 
     GCHandle* GCHandleGuard::release() {
         auto temp = ptr;
@@ -1676,7 +1772,7 @@ namespace Il2CppWrapper {
         ptr = p;
     }
 
-    GCHandleGuard::operator bool() const { return ptr != nullptr; }
+    GCHandleGuard::operator bool() { return ptr != nullptr; }
 
 
     LivenessGuard::LivenessGuard() : ptr(nullptr) {}
@@ -1696,8 +1792,8 @@ namespace Il2CppWrapper {
         if (ptr) ptr->Free();
     }
 
-    Liveness* LivenessGuard::get() const { return ptr; }
-    Liveness* LivenessGuard::operator->() const { return ptr; }
+    Liveness* LivenessGuard::get() { return ptr; }
+    Liveness* LivenessGuard::operator->() { return ptr; }
 
     void LivenessGuard::FromRoot(Object* root) {
         if (ptr) ptr->FromRoot(root);
@@ -1722,9 +1818,160 @@ namespace Il2CppWrapper {
         ptr = p;
     }
 
-    LivenessGuard::operator bool() const { return ptr != nullptr; }
+    LivenessGuard::operator bool() { return ptr != nullptr; }
 
 
+  
+    Image* Image::Get(const char* imageName)
+    {
+        auto domain = Domain::GetCurrent();
+        auto assembly = domain->OpenAssembly(imageName);
+        return assembly->GetImage();
+    }
+
+    Class* ReflectionType::ToClass() {
+        return Class::FromSystemType((ReflectionType*)this);
+    }
+
+    // ReflectionMethod
+    Method* ReflectionMethod::ToMethod() {
+
+        return Method::FromReflection((ReflectionMethod*)this);
+
+    }
+
+    // ReflectionField
+    Field* ReflectionField::ToField() {
+        return Field::FromReflection(this);
+    }
+
+   
+
+    Class* Struct::GetClass()
+    {
+        return Box()->GetClass();
+    }
+
+    uint32_t Struct::GetSize()
+    {
+        return GetClass()->GetInstanceSize();
+    }
+
+    Object* Struct::Box(Class* klass)
+    {
+        if (klass == nullptr)
+        {
+            const size_t size = sizeof(void*) * 2;
+            return (Object*)((intptr_t)this - size);
+        }
+        else {
+			return Object::Box(klass, this);
+        }
+    }
+
+    Method* Struct::GetVirtualMethod(Method* method, Class* klass)
+    {
+        return Box(klass)->GetVirtualMethod(method);
+    }
+
+    Type* Struct::GetType()
+    {
+        return GetClass()->GetType();
+    }
+
+    Struct* Struct::FromClass(Class* klass)
+    {
+        auto val = Object::New(klass);
+        return val->Unbox();
+    }
+
+    Pointer* Struct::UnboxIfValueType(Class* klass, Object* ptr)
+    {
+        return klass->IsValueType() ? (Pointer*)ptr->Unbox() : (Pointer*)ptr;
+    }
+
+    Method* Class::GetMethodByOptions(const MethodSearchOptions& options)
+    {
+        return GetMethodByNameAndTypes(options.methodName, options.paramCount, options.paramTypesString);
+    }
+
+    Method* Class::GetMethodByNameAndTypes(const char* methodName, int paramCount, std::span<const char*> paramTypes)
+    {
+        if (!methodName || paramCount < 0) return nullptr;
+
+        // Primeiro, encontra o método pelo nome e contagem de parâmetros
+        Method* method = GetMethodFromName(methodName, paramCount);
+
+        if (!method) return nullptr;
+
+        // Se paramTypes está vazio, apenas retorna o método encontrado
+        if (paramTypes.empty()) {
+            return method;
+        }
+
+        // Se a contagem de tipos não corresponde, retorna nullptr
+        if ((int)paramTypes.size() != paramCount) {
+            return nullptr;
+        }
+
+        // Valida cada tipo de parâmetro
+        for (int i = 0; i < paramCount; i++) {
+            Type* paramType = method->GetParamType(i);
+            if (!paramType) return nullptr;
+
+            std::string actualTypeName = paramType->GetReflectionName();
+            std::string expectedTypeName = paramTypes[i];
+
+            // Comparação flexível: permite "int" ou "System.Int32"
+            bool typeMatches = false;
+
+            if (actualTypeName == expectedTypeName) {
+                typeMatches = true;
+            }
+            else {
+                // Mapa de aliases de tipos primitivos
+                static const std::unordered_map<std::string, std::string> typeAliases = {
+                    {"int", "System.Int32"},
+                    {"float", "System.Single"},
+                    {"double", "System.Double"},
+                    {"bool", "System.Boolean"},
+                    {"string", "System.String"},
+                    {"byte", "System.Byte"},
+                    {"sbyte", "System.SByte"},
+                    {"short", "System.Int16"},
+                    {"ushort", "System.UInt16"},
+                    {"uint", "System.UInt32"},
+                    {"long", "System.Int64"},
+                    {"ulong", "System.UInt64"},
+                    {"char", "System.Char"},
+                    {"decimal", "System.Decimal"},
+                    {"void", "System.Void"},
+                    {"object", "System.Object"},
+                };
+
+                auto it = typeAliases.find(expectedTypeName);
+                if (it != typeAliases.end()) {
+                    typeMatches = (actualTypeName == it->second);
+                }
+            }
+
+            if (!typeMatches) {
+                return nullptr; // Tipo não corresponde
+            }
+        }
+
+        return method; // Todos os tipos correspondem
+    }
+    Method* Class::GetMethodByPredicate(std::function<bool(Method*)> predicate)
+    {
+        void* iter = nullptr;
+        while (auto method = GetMethods(&iter)) {
+            if (predicate(method)) {
+                return method;
+			}
+        }
+        return nullptr;
+    }
 }
 
 

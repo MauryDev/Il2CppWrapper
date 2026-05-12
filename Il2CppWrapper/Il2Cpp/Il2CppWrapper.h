@@ -7,13 +7,12 @@
 #include <type_traits>
 #include <array>
 #include <stdexcept>
+#include <functional>
 
 namespace Il2CppWrapper {
 
-	namespace {
-		template<typename TRet, typename ...TArgs>
-		using Func = TRet(*)(TArgs...);
-	}
+	template<typename TRet, typename ...TArgs>
+	using Func = TRet(*)(TArgs...);
 
 	inline Core::Callbacks callbacks;
 
@@ -27,13 +26,8 @@ namespace Il2CppWrapper {
 	struct Class;
 	struct Array;
 	struct Assembly;
-#if _MSC_VER
-	using Char = wchar_t;
-#else
-	using Char = wchar_t;
-#define IL2CPP_NATIVE_STRING(str) str
-#endif
 
+	struct Struct;
 #if _MSC_VER
 	using Char = wchar_t;
 #elif __has_feature(cxx_unicode_literals)
@@ -66,6 +60,7 @@ namespace Il2CppWrapper {
 	struct MemoryInformation;
 	enum class GCMode;
 	enum class RuntimeUnhandledExceptionPolicy;
+	enum class MethodFlagsEnum;
 	struct MemoryCallbacks;
 	typedef void (*LivenessRegisterCallback)(Object* obj, void* userdata);
 	typedef void* (*LivenessReallocateCallback)(void* ptr, size_t size, void* userdata);
@@ -107,7 +102,7 @@ namespace Il2CppWrapper {
 	inline Func<void, MemoryCallbacks*> il2cpp_set_memory_callbacks;
 
 
-	inline Func<const Image*> il2cpp_get_corlib;
+	inline Func<Image*> il2cpp_get_corlib;
 
 
 	inline Func<void, const char*, void*> il2cpp_add_internal_call;
@@ -124,81 +119,81 @@ namespace Il2CppWrapper {
 	inline Func<Array*, Class*, Array_size_t> il2cpp_array_new_specific;
 	inline Func<Array*, Class*, Array_size_t*, Array_size_t*> il2cpp_array_new_full;
 	inline Func<Class*, Class*, uint32_t, bool> il2cpp_bounded_array_class_get;
-	inline Func<int, const Class*> il2cpp_array_element_size;
+	inline Func<int,  Class*> il2cpp_array_element_size;
 
 
-	inline Func<const Image*, const Assembly*> il2cpp_assembly_get_image;
+	inline Func< Image*,  Assembly*> il2cpp_assembly_get_image;
 
 	inline Func<void, void(*)(Class*, void*), void*> il2cpp_class_for_each;
-	inline Func<const Type*, Class*> il2cpp_class_enum_basetype;
-	inline Func<bool, const Class*> il2cpp_class_is_inited;
-	inline Func<bool, const Class*> il2cpp_class_is_generic;
-	inline Func<bool, const Class*> il2cpp_class_is_inflated;
+	inline Func< Type*, Class*> il2cpp_class_enum_basetype;
+	inline Func<bool, Class*> il2cpp_class_is_inited;
+	inline Func<bool, Class*> il2cpp_class_is_generic;
+	inline Func<bool, Class*> il2cpp_class_is_inflated;
 	inline Func<bool, Class*, Class*> il2cpp_class_is_assignable_from;
 	inline Func<bool, Class*, Class*, bool> il2cpp_class_is_subclass_of;
 	inline Func<bool, Class*, Class*> il2cpp_class_has_parent;
-	inline Func<Class*, const Type*> il2cpp_class_from_il2cpp_type;
-	inline Func<Class*, const Image*, const char*, const char*> il2cpp_class_from_name;
+	inline Func<Class*, Type*> il2cpp_class_from_il2cpp_type;
+	inline Func<Class*, Image*, const char*, const char*> il2cpp_class_from_name;
 	inline Func<Class*, ReflectionType*> il2cpp_class_from_system_type;
 	inline Func<Class*, Class*> il2cpp_class_get_element_class;
 	inline Func<const Event*, Class*, void**> il2cpp_class_get_events;
 	inline Func<Field*, Class*, void**> il2cpp_class_get_fields;
 	inline Func<Class*, Class*, void**> il2cpp_class_get_nested_types;
 	inline Func<Class*, Class*, void**> il2cpp_class_get_interfaces;
-	inline Func<const Property*, Class*, void**> il2cpp_class_get_properties;
-	inline Func<const Property*, Class*, const char*> il2cpp_class_get_property_from_name;
+	inline Func<Property*, Class*, void**> il2cpp_class_get_properties;
+	inline Func<Property*, Class*, const char*> il2cpp_class_get_property_from_name;
 	inline Func<Field*, Class*, const char*> il2cpp_class_get_field_from_name;
-	inline Func<const Method*, Class*, void**> il2cpp_class_get_methods;
-	inline Func<const Method*, Class*, const char*, int> il2cpp_class_get_method_from_name;
+	inline Func<Method*, Class*, void**> il2cpp_class_get_methods;
+	inline Func<Method*, Class*, const char*, int> il2cpp_class_get_method_from_name;
 	inline Func<const char*, Class*> il2cpp_class_get_name;
-	inline Func<void, const Type*, void(*)(void*, void*), void*> il2cpp_type_get_name_chunked;
+	inline Func<void, Type*, void(*)(void*, void*), void*> il2cpp_type_get_name_chunked;
 	inline Func<const char*, Class*> il2cpp_class_get_namespace;
 	inline Func<Class*, Class*> il2cpp_class_get_parent;
 	inline Func<Class*, Class*> il2cpp_class_get_declaring_type;
 	inline Func<int32_t, Class*> il2cpp_class_instance_size;
-	inline Func<size_t, const Class*> il2cpp_class_num_fields;
-	inline Func<bool, const Class*> il2cpp_class_is_valuetype;
+	inline Func<size_t, Class*> il2cpp_class_num_fields;
+	inline Func<bool, Class*> il2cpp_class_is_valuetype;
 	inline Func<int32_t, Class*, uint32_t*> il2cpp_class_value_size;
-	inline Func<bool, const Class*> il2cpp_class_is_blittable;
-	inline Func<int, const Class*> il2cpp_class_get_flags;
-	inline Func<bool, const Class*> il2cpp_class_is_abstract;
-	inline Func<bool, const Class*> il2cpp_class_is_interface;
-	inline Func<int, const Class*> il2cpp_class_array_element_size;
-	inline Func<Class*, const Type*> il2cpp_class_from_type;
-	inline Func<const Type*, Class*> il2cpp_class_get_type;
+	inline Func<bool, Class*> il2cpp_class_is_blittable;
+	inline Func<int, Class*> il2cpp_class_get_flags;
+	inline Func<bool, Class*> il2cpp_class_is_abstract;
+	inline Func<bool, Class*> il2cpp_class_is_interface;
+	inline Func<int, Class*> il2cpp_class_array_element_size;
+	inline Func<Class*, Type*> il2cpp_class_from_type;
+	inline Func<Type*, Class*> il2cpp_class_get_type;
 	inline Func<uint32_t, Class*> il2cpp_class_get_type_token;
 	inline Func<bool, Class*, Class*> il2cpp_class_has_attribute;
 	inline Func<bool, Class*> il2cpp_class_has_references;
-	inline Func<bool, const Class*> il2cpp_class_is_enum;
-	inline Func<const Image*, Class*> il2cpp_class_get_image;
-	inline Func<const char*, const Class*> il2cpp_class_get_assemblyname;
-	inline Func<int, const Class*> il2cpp_class_get_rank;
-	inline Func<uint32_t, const Class*> il2cpp_class_get_data_size;
-	inline Func<void*, const Class*> il2cpp_class_get_static_field_data;
+	inline Func<bool, Class*> il2cpp_class_is_enum;
+	inline Func<Image*, Class*> il2cpp_class_get_image;
+	inline Func<const char*, Class*> il2cpp_class_get_assemblyname;
+	inline Func<int, Class*> il2cpp_class_get_rank;
+	inline Func<uint32_t, Class*> il2cpp_class_get_data_size;
+	inline Func<void*, Class*> il2cpp_class_get_static_field_data;
 
 	inline Func<bool, const char*> il2cpp_stats_dump_to_file;
 	inline Func<uint64_t, Stat> il2cpp_stats_get_value;
 
 	inline Func<Domain*> il2cpp_domain_get;
-	inline Func<const Assembly*, Domain*, const char*> il2cpp_domain_assembly_open;
-	inline Func<const Assembly**, const Domain*, size_t*> il2cpp_domain_get_assemblies;
+	inline Func<Assembly*, Domain*, const char*> il2cpp_domain_assembly_open;
+	inline Func<Assembly**, Domain*, size_t*> il2cpp_domain_get_assemblies;
 
 	inline Func<void, Exception*> il2cpp_raise_exception;
-	inline Func<Exception*, const Image*, const char*, const char*, const char*> il2cpp_exception_from_name_msg;
+	inline Func<Exception*, Image*, const char*, const char*, const char*> il2cpp_exception_from_name_msg;
 	inline Func<Exception*, const char*> il2cpp_get_exception_argument_null;
-	inline Func<void, const Exception*, char*, int> il2cpp_format_exception;
-	inline Func<void, const Exception*, char*, int> il2cpp_format_stack_trace;
+	inline Func<void, Exception*, char*, int> il2cpp_format_exception;
+	inline Func<void, Exception*, char*, int> il2cpp_format_stack_trace;
 	inline Func<void, Exception*> il2cpp_unhandled_exception;
-	inline Func<void, const Exception*, uintptr_t**, int*, char**, char**> il2cpp_native_stack_trace;
+	inline Func<void, Exception*, uintptr_t**, int*, char**, char**> il2cpp_native_stack_trace;
 
 
 	inline Func<int, Field*> il2cpp_field_get_flags;
-	inline Func<const Field*, ReflectionField*> il2cpp_field_get_from_reflection;
+	inline Func<Field*, ReflectionField*> il2cpp_field_get_from_reflection;
 	inline Func<const char*, Field*> il2cpp_field_get_name;
 	inline Func<Class*, Field*> il2cpp_field_get_parent;
 	inline Func<ReflectionField*, Field*, Class*> il2cpp_field_get_object;
 	inline Func<size_t, Field*> il2cpp_field_get_offset;
-	inline Func<const Type*, Field*> il2cpp_field_get_type;
+	inline Func<Type*, Field*> il2cpp_field_get_type;
 	inline Func<void, Object*, Field*, void*> il2cpp_field_get_value;
 	inline Func<Object*, Field*, Object*> il2cpp_field_get_value_object;
 	inline Func<bool, Field*, Class*> il2cpp_field_has_attribute;
@@ -249,33 +244,33 @@ namespace Il2CppWrapper {
 	inline Func<void, Liveness*> il2cpp_unity_liveness_free_struct;
 
 
-	inline Func<const Type*, const Method*> il2cpp_method_get_return_type;
-	inline Func<Class*, const Method*> il2cpp_method_get_declaring_type;
-	inline Func<const char*, const Method*> il2cpp_method_get_name;
-	inline Func<const Method*, const ReflectionMethod*> il2cpp_method_get_from_reflection;
-	inline Func<ReflectionMethod*, const Method*, Class*> il2cpp_method_get_object;
-	inline Func<bool, const Method*> il2cpp_method_is_generic;
-	inline Func<bool, const Method*> il2cpp_method_is_inflated;
-	inline Func<bool, const Method*> il2cpp_method_is_instance;
-	inline Func<uint32_t, const Method*> il2cpp_method_get_param_count;
-	inline Func<const Type*, const Method*, uint32_t> il2cpp_method_get_param;
-	inline Func<Class*, const Method*> il2cpp_method_get_class;
-	inline Func<bool, const Method*, Class*> il2cpp_method_has_attribute;
-	inline Func<uint32_t, const Method*, uint32_t*> il2cpp_method_get_flags;
-	inline Func<uint32_t, const Method*> il2cpp_method_get_token;
-	inline Func<const char*, const Method*, uint32_t> il2cpp_method_get_param_name;
+	inline Func<Type*, Method*> il2cpp_method_get_return_type;
+	inline Func<Class*, Method*> il2cpp_method_get_declaring_type;
+	inline Func<const char*, Method*> il2cpp_method_get_name;
+	inline Func<Method*, ReflectionMethod*> il2cpp_method_get_from_reflection;
+	inline Func<ReflectionMethod*, Method*, Class*> il2cpp_method_get_object;
+	inline Func<bool, Method*> il2cpp_method_is_generic;
+	inline Func<bool, Method*> il2cpp_method_is_inflated;
+	inline Func<bool, Method*> il2cpp_method_is_instance;
+	inline Func<uint32_t, Method*> il2cpp_method_get_param_count;
+	inline Func<Type*, Method*, uint32_t> il2cpp_method_get_param;
+	inline Func<Class*, Method*> il2cpp_method_get_class;
+	inline Func<bool, Method*, Class*> il2cpp_method_has_attribute;
+	inline Func<uint32_t, Method*, uint32_t*> il2cpp_method_get_flags;
+	inline Func<uint32_t, Method*> il2cpp_method_get_token;
+	inline Func<const char*, Method*, uint32_t> il2cpp_method_get_param_name;
 
 	inline Func<uint32_t, Property*> il2cpp_property_get_flags;
-	inline Func<const Method*, Property*> il2cpp_property_get_get_method;
-	inline Func<const Method*, Property*> il2cpp_property_get_set_method;
+	inline Func<Method*, Property*> il2cpp_property_get_get_method;
+	inline Func<Method*, Property*> il2cpp_property_get_set_method;
 	inline Func<const char*, Property*> il2cpp_property_get_name;
 	inline Func<Class*, Property*> il2cpp_property_get_parent;
 
-	inline Func<Class*, const Object*> il2cpp_object_get_class;
-	inline Func<uint32_t, const Object*> il2cpp_object_get_size;
-	inline Func<const Method*, const Object*, const Method*> il2cpp_object_get_virtual_method;
-	inline Func<Object*, const Class*> il2cpp_object_new;
-	inline Func<void*, const Object*> il2cpp_object_unbox;
+	inline Func<Class*, Object*> il2cpp_object_get_class;
+	inline Func<uint32_t, Object*> il2cpp_object_get_size;
+	inline Func<Method*, Object*, Method*> il2cpp_object_get_virtual_method;
+	inline Func<Object*, Class*> il2cpp_object_new;
+	inline Func<void*, Object*> il2cpp_object_unbox;
 	inline Func<Object*, Class*, void*> il2cpp_value_box;
 
 	inline Func<void, Object*> il2cpp_monitor_enter;
@@ -286,8 +281,8 @@ namespace Il2CppWrapper {
 	inline Func<void, Object*> il2cpp_monitor_wait;
 	inline Func<bool, Object*, uint32_t> il2cpp_monitor_try_wait;
 
-	inline Func<Object*, const Method*, void*, void**, Exception**> il2cpp_runtime_invoke;
-	inline Func<Object*, const Method*, void*, Object**, int, Exception**> il2cpp_runtime_invoke_convert_args;
+	inline Func<Object*, Method*, void*, void**, Exception**> il2cpp_runtime_invoke;
+	inline Func<Object*, Method*, void*, Object**, int, Exception**> il2cpp_runtime_invoke_convert_args;
 	inline Func<void, Class*> il2cpp_runtime_class_init;
 	inline Func<void, Object*> il2cpp_runtime_object_init;
 	inline Func<void, Object*, Exception**> il2cpp_runtime_object_init_exception;
@@ -317,24 +312,24 @@ namespace Il2CppWrapper {
 	inline Func<int32_t, Thread*> il2cpp_thread_get_stack_depth;
 	inline Func<void, BacktraceFunc> il2cpp_override_stack_backtrace;
 
-	inline Func<Object*, const Type*> il2cpp_type_get_object;
-	inline Func<int, const Type*> il2cpp_type_get_type;
-	inline Func<Class*, const Type*> il2cpp_type_get_class_or_element_class;
-	inline Func<char*, const Type*> il2cpp_type_get_name;
-	inline Func<bool, const Type*> il2cpp_type_is_byref;
-	inline Func<uint32_t, const Type*> il2cpp_type_get_attrs;
-	inline Func<bool, const Type*, const Type*> il2cpp_type_equals;
-	inline Func<char*, const Type*> il2cpp_type_get_assembly_qualified_name;
-	inline Func<char*, const Type*> il2cpp_type_get_reflection_name;
-	inline Func<bool, const Type*> il2cpp_type_is_static;
-	inline Func<bool, const Type*> il2cpp_type_is_pointer_type;
+	inline Func<Object*, Type*> il2cpp_type_get_object;
+	inline Func<int, Type*> il2cpp_type_get_type;
+	inline Func<Class*, Type*> il2cpp_type_get_class_or_element_class;
+	inline Func<char*, Type*> il2cpp_type_get_name;
+	inline Func<bool, Type*> il2cpp_type_is_byref;
+	inline Func<uint32_t, Type*> il2cpp_type_get_attrs;
+	inline Func<bool, Type*, Type*> il2cpp_type_equals;
+	inline Func<char*, Type*> il2cpp_type_get_assembly_qualified_name;
+	inline Func<char*, Type*> il2cpp_type_get_reflection_name;
+	inline Func<bool, Type*> il2cpp_type_is_static;
+	inline Func<bool, Type*> il2cpp_type_is_pointer_type;
 
-	inline Func<const Assembly*, const Image*> il2cpp_image_get_assembly;
-	inline Func<const char*, const Image*> il2cpp_image_get_name;
-	inline Func<const char*, const Image*> il2cpp_image_get_filename;
-	inline Func<const Method*, const Image*> il2cpp_image_get_entry_point;
-	inline Func<size_t, const Image*> il2cpp_image_get_class_count;
-	inline Func<const Class*, const Image*, size_t> il2cpp_image_get_class;
+	inline Func<Assembly*, Image*> il2cpp_image_get_assembly;
+	inline Func<const char*, Image*> il2cpp_image_get_name;
+	inline Func<const char*, Image*> il2cpp_image_get_filename;
+	inline Func<Method*, Image*> il2cpp_image_get_entry_point;
+	inline Func<size_t, Image*> il2cpp_image_get_class_count;
+	inline Func<Class*, Image*, size_t> il2cpp_image_get_class;
 
 	inline Func<MemoryInformation*> il2cpp_capture_memory_snapshot;
 	inline Func<void, MemoryInformation*> il2cpp_free_captured_memory_snapshot;
@@ -346,12 +341,12 @@ namespace Il2CppWrapper {
 	inline Func<bool> il2cpp_is_debugger_attached;
 	inline Func<void, DebuggerTransport*> il2cpp_register_debugger_agent_transport;
 
-	inline Func<bool, const Method*, MethodDebugInfo*> il2cpp_debug_get_method_info;
+	inline Func<bool, Method*, MethodDebugInfo*> il2cpp_debug_get_method_info;
 	inline Func<void, const void*> il2cpp_unity_install_unitytls_interface;
 
 	inline Func<CustomAttribute*, Class*> il2cpp_custom_attrs_from_class;
-	inline Func<CustomAttribute*, const Method*> il2cpp_custom_attrs_from_method;
-	inline Func<CustomAttribute*, const Field*> il2cpp_custom_attrs_from_field;
+	inline Func<CustomAttribute*, Method*> il2cpp_custom_attrs_from_method;
+	inline Func<CustomAttribute*, Field*> il2cpp_custom_attrs_from_field;
 	inline Func<Object*, CustomAttribute*, Class*> il2cpp_custom_attrs_get_attr;
 	inline Func<bool, CustomAttribute*, Class*> il2cpp_custom_attrs_has_attr;
 	inline Func<Array*, CustomAttribute*> il2cpp_custom_attrs_construct;
@@ -363,11 +358,11 @@ namespace Il2CppWrapper {
 	inline Func<void, int64_t> il2cpp_set_default_thread_affinity;
 	inline Func<void, AndroidUpStateFunc> il2cpp_unity_set_android_network_up_state_func;
 
-	inline Func<size_t, const Class*> il2cpp_class_get_bitmap_size;
+	inline Func<size_t, Class*> il2cpp_class_get_bitmap_size;
 	inline Func<void, Class*, size_t*> il2cpp_class_get_bitmap;
 
 	struct MethodFlags {
-		uint32_t flags;
+		MethodFlagsEnum flags;
 		uint32_t implementationFlags;
 	};
 	struct ValueSize {
@@ -387,35 +382,42 @@ namespace Il2CppWrapper {
 
 	struct ParameterInfo {
 		const char* name;
-		const Type* type;
+		Type* type;
+	};
+
+
+	struct MethodSearchOptions {
+		const char* methodName;
+		int paramCount;
+		std::span<const char*> paramTypesString; // Ex: "int,float,bool" ou "System.String,System.Int32"
 	};
 
 	struct Pointer
 	{
-		bool isValid() const;
+		bool isValid();
 		template <typename T>
 		T* as() {
 			return reinterpret_cast<T*>(this);
 		}
 
 		template <typename T>
-		T get() const {
+		T get() {
 			if (!isValid()) return T{};
 			auto temp = this;
 			T value{};
 			PointerToValue(temp, value);
 			return value;
 		}
-		Pointer* add(size_t offset) const;
+		Pointer* add(size_t offset);
 
-		Pointer* operator[](size_t offset) const;
+		Pointer* operator[](size_t offset);
 
-		operator bool() const;
-		bool operator!() const;
+		operator bool();
+		bool operator!();
 
 		// Comparação
-		bool operator==(const Pointer* other) const;
-		bool Equals(const Pointer* other) const;
+		bool operator==(const Pointer* other);
+		bool Equals(const Pointer* other);
 		template <typename T>
 		static Pointer* ToPointer(const T& value)
 		{
@@ -435,19 +437,19 @@ namespace Il2CppWrapper {
 
 	
 	struct Domain : Pointer {
-		static Domain* Get();
+		static Domain* GetCurrent();
 
-		const Assembly* OpenAssembly(const char* name);
+		Assembly* OpenAssembly(const char* name);
 
-		std::span<const Assembly*> GetAssembliesList() const;
-		static const Image* GetCorlib();
+		std::span<Assembly*> GetAssembliesList();
+		static Image* GetCorlib();
 		
 		Class* LookUpClass(const char* namespaze, const char* name);
 	};
 
 	struct Class : Pointer {
 
-		size_t GetBitmapSize() const;
+		size_t GetBitmapSize();
 		std::vector<size_t> GetBitmap();
 		static void ForEach(void(*klassReportFunc)(Class* klass, void* userData), void* userData);
 		
@@ -459,33 +461,37 @@ namespace Il2CppWrapper {
 
 			ForEach(invoker, &callback);
 		}
-		const Type* GetEnumBaseType();
-		bool IsInited() const;
-		bool IsGeneric() const;
-		bool IsInflated() const;
+		Type* GetEnumBaseType();
+		bool IsInited();
+		bool IsGeneric();
+		bool IsInflated();
 		bool IsAssignableFrom(Class* oklass);
 		bool IsSubclassOf(Class* klassc, bool check_interfaces);
 		bool HasParent(Class* klassc);
-		static Class* FromIl2CppType(const Type* type);
-		static Class* FromName(const Image* image, const char* namespaze, const char* name);
+		static Class* FromIl2CppType(Type* type);
+		static Class* FromName(Image* image, const char* namespaze, const char* name);
 		static Class* FromSystemType(ReflectionType* type);
+
+		ReflectionType* ToSystemType();
+
 		Class* GetElementClass();
 
 	private:
 		template <typename T>
-		std::vector<const T*> CollectMetadata(T* (Class::* fetchFunc)(void**)) {
-			std::vector<const T*> result;
+		std::vector<T*> CollectMetadata(T* (Class::* fetchFunc)(void**)) {
+			std::vector<T*> result;
 			void* iter = nullptr;
 
-			while (const T* item = (this->*fetchFunc)(&iter)) {
+			while (T* item = (this->*fetchFunc)(&iter)) {
 				result.push_back(item);
 			}
 			return result;
 		}
+
 		template <typename T, typename F>
 		void ForEachMetadata(T* (Class::* fetchFunc)(void**), F&& callback) {
 			void* iter = nullptr;
-			while (const T* evt = (this->*fetchFunc)(&iter)) {
+			while (T* evt = (this->*fetchFunc)(&iter)) {
 				callback(evt);
 			}
 		}
@@ -498,7 +504,7 @@ namespace Il2CppWrapper {
 
 		}
 		Field* GetFields(void** iter);
-		std::vector<const Field*> GetFieldsList();
+		std::vector<Field*> GetFieldsList();
 		template <typename F>
 		void ForEachField(F&& callback) {
 			ForEachMetadata(&Class::GetFields,std::move(callback));
@@ -506,7 +512,7 @@ namespace Il2CppWrapper {
 		}
 
 		Class* GetNestedTypes(void** iter);
-		std::vector<const Class*> GetNestedTypesList();
+		std::vector<Class*> GetNestedTypesList();
 		template <typename F>
 		void ForEachNestedType(F&& callback) {
 			ForEachMetadata(&Class::GetNestedTypes, std::move(callback));
@@ -514,7 +520,7 @@ namespace Il2CppWrapper {
 		}
 
 		Class* GetInterfaces(void** iter);
-		std::vector<const Class*> GetInterfacesList();
+		std::vector<Class*> GetInterfacesList();
 		template <typename F>
 		void ForEachInterfaces(F&& callback) {
 			ForEachMetadata(&Class::GetInterfaces, std::move(callback));
@@ -522,15 +528,15 @@ namespace Il2CppWrapper {
 		}
 
 
-		const Property* GetProperties(void** iter);
-		std::vector<const Property*> GetPropertiesList();
+		Property* GetProperties(void** iter);
+		std::vector<Property*> GetPropertiesList();
 		template <typename F>
 		void ForEachProperty(F&& callback) {
 			ForEachMetadata(&Class::GetProperties, std::move(callback));
 
 		}
-		const Method* GetMethods(void** iter);
-		std::vector<const Method*> GetMethodsList();
+		Method* GetMethods(void** iter);
+		std::vector<Method*> GetMethodsList();
 		template <typename F>
 		void ForEachMethod(F&& callback) {
 			ForEachMetadata(&Class::GetMethods, std::move(callback));
@@ -538,36 +544,36 @@ namespace Il2CppWrapper {
 		}
 
 
-		const Property* GetPropertyFromName(const char* name);
+		Property* GetPropertyFromName(const char* name);
 		Field* GetFieldFromName(const char* name);
-		const Method* GetMethodFromName(const char* name, int argsCount);
+		Method* GetMethodFromName(const char* name, int argsCount);
 
 		const char* GetName();
 		const char* GetNamespace();
 		Class* GetParent();
 		Class* GetDeclaringType();
 		int32_t GetInstanceSize();
-		size_t GetNumFields() const;
-		bool IsValueType() const;
+		size_t GetNumFields();
+		bool IsValueType();
 		ValueSize GetValueSize();
-		bool IsBlittable() const;
-		int GetFlags() const;
-		bool IsAbstract() const;
-		bool IsInterface() const;
-		int GetArrayElementSize() const;
-		const Type* GetType();
+		bool IsBlittable();
+		int GetFlags();
+		bool IsAbstract();
+		bool IsInterface();
+		int GetArrayElementSize();
+		Type* GetType();
 		uint32_t GetTypeToken();
 		bool HasAttribute(Class* attr_class);
 		bool HasReferences();
-		bool IsEnum() const;
-		const Image* GetImage();
-		const char* GetAssemblyName() const;
-		int GetRank() const;
-		uint32_t GetDataSize() const;
-		void* GetStaticFieldData() const;
+		bool IsEnum();
+		Image* GetImage();
+		const char* GetAssemblyName();
+		int GetRank();
+		uint32_t GetDataSize();
+		void* GetStaticFieldData();
 
-		bool IsString() const;
-		bool IsInt32() const;
+		bool IsString();
+		bool IsInt32();
 		std::string GetFullName();
 		bool IsNested();
 
@@ -577,34 +583,71 @@ namespace Il2CppWrapper {
 		/**
 	 * @brief Obtém o nome do tipo de forma fragmentada (chunked).
 	 */
-		void GetNameChunked(const Type* type, void(*callback)(void*, void*), void* userData);
+		void GetNameChunked(Type* type, void(*callback)(void*, void*), void* userData);
 
 		/**
 		 * @brief Obtém uma classe a partir de um tipo Il2Cpp.
 		 */
-		static Class* FromType(const Type* type);
+		static Class* FromType(Type* type);
+
+
+		/**
+		 * @brief Busca um método usando opções de pesquisa que incluem nome, contagem de parâmetros e tipos.
+		 * @param options Estrutura contendo methodName, paramCount e paramTypesString
+		 * @return Ponteiro para o método encontrado, ou nullptr se não encontrado
+		 *
+		 * Exemplos:
+		 *   - MethodSearchOptions{ "Add", 2, std::array<const char*, 2>{"int", "int"} }
+		 *   - MethodSearchOptions{ "ToString", 0, {} }
+		 *   - MethodSearchOptions{ "Parse", 1, std::array<const char*, 1>{"System.String"} }
+		 */
+		Method* GetMethodByOptions(const MethodSearchOptions& options);
+
+		/**
+		 * @brief Versão simplificada: busca método por nome e contagem de parâmetros.
+		 * Equivalente a GetMethodFromName.
+		 */
+		Method* GetMethodByOptions(const char* methodName, int paramCount) {
+			return GetMethodFromName(methodName, paramCount);
+		}
+
+		/**
+		 * @brief Busca método validando também os tipos dos parâmetros.
+		 * @param methodName Nome do método
+		 * @param paramCount Número de parâmetros
+		 * @param paramTypes Span com tipos de parâmetros (ex: {"int", "float"})
+		 * @return Ponteiro para o método, ou nullptr se os tipos não corresponderem
+		 */
+		Method* GetMethodByNameAndTypes(const char* methodName, int paramCount, std::span<const char*> paramTypes);
+
+		/**
+		 * @brief Busca um método baseado em um predicado customizado.
+		 * @param predicate Função que retorna true para o método desejado.
+		 * @return O primeiro Method* que satisfaça o predicado, ou nullptr.
+		 */
+		Method* GetMethodByPredicate(std::function<bool(Method*)> predicate);
 	};
 	struct Object : Pointer {
 		// Retorna a classe (tipo) deste objeto
-		Class* GetClass() const;
+		Class* GetClass();
 
 		// Retorna o tamanho ocupado pelo objeto na memória (em bytes)
-		uint32_t GetSize() const;
+		uint32_t GetSize();
 
 		// Resolve qual implementação de um método virtual deve ser chamada para esta instância
-		const Method* GetVirtualMethod(const Method* method) const;
+		Method* GetVirtualMethod(Method* method);
 		// --- Métodos Estáticos (Criação e Conversão) ---
 
 		// Instancia uma nova classe (Equivalente ao 'new' do C#)
-		static Object* New(const Class* klass);
+		static Object* New(Class* klass);
 
 		void* UnboxImpl();
 		/**
 		 * @brief Extrai o valor de um objeto (Unboxing).
 		 * Usado para tipos como int, float, structs que foram "boxeados" em objetos.
 		 */
-		template <typename T>
-		T Unbox() const {
+		template <typename T = Struct*>
+		T Unbox() {
 			auto ptr = (Pointer*)UnboxImpl();
 			return ptr->get<T>();
 		}
@@ -615,8 +658,68 @@ namespace Il2CppWrapper {
 		 * Necessário para passar tipos primitivos em funções que esperam 'object'.
 		 */
 		template <typename T>
-		static Object* Box(Class* klass, const T& value) {
-			return BoxImpl(klass, &value);
+		static Object* Box(Class* klass,  T&& value) {
+			return BoxImpl(klass, Pointer::ToPointer(value));
+		}
+
+		Type* GetType();
+
+		Pointer* UnboxIfValueType(Class* klass);
+		template<typename T>
+		T& field(size_t offset)
+		{
+			return *reinterpret_cast<T*>(
+				reinterpret_cast<std::byte*>(this) + offset
+				);
+		}
+
+	};
+
+	struct Struct : Pointer {
+		/**
+		 * @brief Retorna a Classe associada a esta struct.
+		 * Uma struct no Il2Cpp é fundamentalmente uma classe com propriedades específicas.
+		 */
+		Class* GetClass();
+
+		/**
+		 * @brief Retorna o tamanho em bytes da struct (sem header de objeto).
+		 */
+		uint32_t GetSize();
+
+
+
+	
+
+		/**
+		 * @brief Cria uma instância boxeada da struct como um Object.
+		 */
+		Object* Box(Class* klass = nullptr);
+
+		Method* GetVirtualMethod(Method* method, Class* klass = nullptr);
+
+		
+
+	
+
+		/**
+		 * @brief Obtém o tipo Il2Cpp associado.
+		 */
+		Type* GetType();
+
+		/**
+		 * @brief Helper: Cria uma struct a partir de um Class.
+		 */
+		static Struct* FromClass(Class* klass);
+
+		static Pointer* UnboxIfValueType(Class* klass, Object* ptr);
+
+		template<typename T>
+		T& field(size_t offset)
+		{
+			return *reinterpret_cast<T*>(
+				reinterpret_cast<std::byte*>(Box()) + offset
+				);
 		}
 	};
 
@@ -665,7 +768,7 @@ namespace Il2CppWrapper {
 
 		template <typename T>
 		std::span<T> AsSpan() {
-			return std::span<T>(static_cast<T*>(GetRawAddress()), GetLength());
+			return std::span<T>((T*)(GetRawAddress()), GetLength());
 		}
 
 		bool BoundsCheck(uint32_t index);
@@ -693,7 +796,7 @@ namespace Il2CppWrapper {
 		template<typename T>
 		void CopyFrom(std::span<T> src)
 		{
-			uint32_t count = std::min((uint32_t)src.size(), GetLength());
+			uint32_t count = std::min<uint32_t>(src.size(), GetLength());
 			std::copy(src.begin(), src.begin() + count, begin());
 		}
 		void Clear();
@@ -743,7 +846,7 @@ namespace Il2CppWrapper {
 	};
 
 	struct Assembly {
-		const Image* GetImage() const;
+		Image* GetImage();
 	};
 
 	struct Stats {
@@ -760,29 +863,29 @@ namespace Il2CppWrapper {
 	struct Exception : Object {
 		void Raise();
 
-		static Exception* FromNameMsg(const Image* image, const char* name_space, const char* name, const char* msg);
+		static Exception* Create(Image* image, const char* name_space, const char* name, const char* msg);
 
-		static Exception* ArgumentNull(const char* arg);
+		static Exception* CreateArgumentNull(const char* arg);
 
 		// Retorna a mensagem amigável da exceção
-		std::string getMessage() const;
+		std::string getMessage();
 
-		std::string GetStackTrace() const;
+		std::string GetStackTrace();
 
 		void Unhandled();
 
-		NativeStackTrace GetNativeStackTrace() const;
+		NativeStackTrace GetNativeStackTrace();
 
-		std::string ToString() const;
+		std::string ToString();
 	};
 
 	struct Field : Pointer {
 		Class* GetParent();
 		size_t GetOffset();
-		const Type* GetType();
+		Type* GetType();
 		int GetFlags();
 		bool IsLiteral();
-
+		const char* GetName();
 		bool HasAttribute(Class* attr_class);
 		void GetValueImpl(Object* obj,void* val);
 
@@ -830,7 +933,7 @@ namespace Il2CppWrapper {
 		ReflectionField* GetReflectionObject(Class* refclass);
 		
 
-		static const Field* FromReflection(ReflectionField* reflectionField);
+		static Field* FromReflection(ReflectionField* reflectionField);
 	};
 
 	struct GC {
@@ -878,7 +981,7 @@ namespace Il2CppWrapper {
 
 		static GCHandle* NewWeak(Object* obj, bool track_resurrection = false);
 
-		Object* GetTarget() const;
+		Object* GetTarget();
 
 		void Free();
 
@@ -918,47 +1021,60 @@ namespace Il2CppWrapper {
 		void Free();
 	};
 	struct Method : Pointer {
-		const char* GetName() const;
-		Class* GetDeclaringType() const;
-		Class* GetClass() const;
-		const Type* GetReturnType() const;
-		uint32_t GetToken() const;
+		const char* GetName();
+		Class* GetDeclaringType();
+		Class* GetClass();
+		Type* GetReturnType();
+		uint32_t GetToken();
 
 		// Flags de Método (Public, Private, Static, etc)
-		MethodFlags GetFlags() const;
+		MethodFlags GetFlags();
 
 		// Informações de Estado
-		bool IsGeneric() const;
-		bool IsInflated() const;
-		bool IsInstance() const;
+		bool IsGeneric();
+		bool IsInflated();
+		bool IsInstance();
 
 		// Gerenciamento de Parâmetros
-		uint32_t GetParamCount() const;
+		uint32_t GetParamCount();
 
-		const Type* GetParamType(uint32_t index) const;
+		Type* GetParamType(uint32_t index);
 
-		const char* GetParamName(uint32_t index) const;
+		const char* GetParamName(uint32_t index);
 
-		bool HasAttribute(Class* attr_class) const;
+		bool HasAttribute(Class* attr_class);
 
 		// Reflexão (System.Reflection.MethodInfo)
-		ReflectionMethod* GetReflectionObject(Class* refclass = nullptr) const;
+		ReflectionMethod* GetReflectionObject(Class* refclass = nullptr);
 
-		static const Method* FromReflection(const ReflectionMethod* reflectionMethod);
+		static Method* FromReflection(ReflectionMethod* reflectionMethod);
 
-		bool IsStatic() const;
-		std::string GetFullName() const;
-		void* GetNativePointer() const;
+		bool IsStatic();
+		std::string GetFullName();
+		void* GetNativePointer();
 
-		std::vector<ParameterInfo> GetParameters() const;
+		std::vector<ParameterInfo> GetParameters();
+
+		/**
+		 * @brief Iterates over all parameters of the method using a callback.
+		 * @param callback Lambda or function to be called for each parameter.
+		 */
+		template <typename F>
+		void ForEachParameter(F&& callback) {
+			uint32_t count = GetParamCount();
+			for (uint32_t i = 0; i < count; i++) {
+				callback({ GetParamName(i), GetParamType(i) });
+			}
+		}
+
 
 		Pointer* Invoke(Pointer* obj, std::span<Pointer*> args, Exception** exc = nullptr);
 
 		/**
 		 * @brief Helper template para invocar métodos de forma mais simples usando std::array.
 		 */
-		template <typename TObj, typename... Args>
-		Pointer* InvokeSafe(TObj&& obj, Exception** exc, Args&&... args) {
+		template <typename TObj = Pointer*, typename TRet = Object*, typename... Args>
+		TRet InvokeSafe(TObj&& obj, Exception** exc, Args&&... args) {
 			// 1. Definimos o tamanho do array em tempo de compilação
 			constexpr std::size_t numArgs = sizeof...(Args);
 
@@ -973,35 +1089,34 @@ namespace Il2CppWrapper {
 				((params[i++] = Pointer::ToPointer(args)), ...);
 
 				// 4. Chamamos o Invoke (ajuste o Invoke para aceitar std::array ou use data())
-				return Invoke(that, params, exc);
+				return Invoke(that, params, exc)->get<TRet>();
 			}
 			else {
 				// Caso não haja argumentos
-				return Invoke(that, nullptr, 0, exc);
+				return Invoke(that, nullptr, 0, exc)->get<TRet>();
 			}
 		}
 
 		/** * @brief Helper template para invocar métodos lançando exceção em caso de erro.
  */
-		template <typename TObj, typename... Args>
-		Pointer* InvokeUnsafe(TObj&& obj, Args&&... args) {
+		template <typename TObj = Pointer*, typename TRet = Object*, typename... Args>
+		TRet Call(TObj&& obj, Args&&... args) {
 			constexpr std::size_t numArgs = sizeof...(Args);
 
 			// Criamos um ponteiro local para capturar a exceção do sistema interno
 			Exception* exc = nullptr;
-			Pointer* result = nullptr;
+			TRet result{};
 
 			Pointer* that = Pointer::ToPointer(std::forward<TObj>(obj));
 
-			if constexpr (numArgs > 0) {
-				std::array<Pointer*, numArgs> params;
-				std::size_t i = 0;
-				((params[i++] = Pointer::ToPointer(std::forward<Args>(args))), ...);
 
-				result = Invoke(that, params.data(), numArgs, &exc);
+			if constexpr (numArgs > 0) {
+				std::array<Pointer*, numArgs> params{ Pointer::ToPointer(std::forward<Args>(args))...};
+
+				result = Invoke(that, params, &exc)->get<TRet>();
 			}
 			else {
-				result = Invoke(that, nullptr, 0, &exc);
+				result = Invoke(that, std::span<Pointer*>{}, &exc)->get<TRet>();
 			}
 
 			// Se 'exc' não for nulo, algo deu errado no Invoke
@@ -1021,37 +1136,37 @@ namespace Il2CppWrapper {
 	};
 
 	struct Property : Pointer {
-		const char* GetName() const;
-		Class* GetParent() const;
-		uint32_t GetFlags() const;
+		const char* GetName();
+		Class* GetParent();
+		uint32_t GetFlags();
 
 		// Retorna o método 'get' da propriedade (pode ser null)
-		const Method* GetGetMethod() const;
+		Method* GetGetMethod();
 
 		// Retorna o método 'set' da propriedade (pode ser null)
-		const Method* GetSetMethod() const;
+		Method* GetSetMethod();
 
 		// --- Helpers Amigáveis ---
 
 		// Verifica se a propriedade pode ser lida
-		bool CanRead() const;
+		bool CanRead();
 
 		// Verifica se a propriedade pode ser escrita
-		bool CanWrite() const;
+		bool CanWrite();
 
-		Pointer* GetValueImpl(Pointer* that = nullptr);
+		Object* GetValueImpl(Pointer* that = nullptr);
 
-		template <typename TObj, typename T>
-		T GetValue(TObj&& obj = nullptr) const {
+		template <typename TObj = Pointer*, typename T = Object*>
+		T GetValue(TObj&& obj) {
 			Pointer* refObj = Pointer::ToPointer(obj);
 			
-			Pointer* result = GetValueImpl(refObj);
+			auto result = GetValueImpl(refObj);
 			
 			return result->get<T>();
 		}
 
 		// --- SetValue ---
-		void SetValueImpl(Pointer* that, Pointer* value) const;
+		void SetValueImpl(Pointer* that, Pointer* value);
 
 		template <typename TObj, typename T>
 		void SetValue(TObj&& obj,  T&& value) {
@@ -1103,12 +1218,12 @@ namespace Il2CppWrapper {
 		 * @param params Array de ponteiros para os argumentos.
 		 * @param exc Ponteiro para capturar uma possível exceção do C#.
 		 */
-		static Object* Invoke(const Method* method, void* obj, void** params, Exception** exc = nullptr);
+		static Object* Invoke(Method* method, void* obj, void** params, Exception** exc = nullptr);
 
 		/**
 		 * @brief Invoca um método convertendo argumentos (útil para tipos primitivos boxeados).
 		 */
-		static Object* InvokeConvertArgs(const Method* method, void* obj, Object** params, int paramCount, Exception** exc = nullptr);
+		static Object* InvokeConvertArgs(Method* method, void* obj, Object** params, int paramCount, Exception** exc = nullptr);
 
 		// Inicializa os campos estáticos de uma classe (chama o cctor / construtor estático)
 		static void ClassInit(Class* klass);
@@ -1137,6 +1252,8 @@ namespace Il2CppWrapper {
 		static String* New(const char* str, uint32_t length);
 
 		static String* NewUTF16(const Char* text, int32_t len);
+		static String* FromStdString(const std::string& str);
+		static String* FromStdWString(const std::u16string& str);
 
 		// Otimização: Interna a string na tabela global do runtime
 		String* Intern();
@@ -1220,34 +1337,34 @@ namespace Il2CppWrapper {
 
 	struct Type : Pointer {
 		// Retorna o objeto de reflexão (System.Type)
-		Object* getObject() const;
+		ReflectionType* getObject();
 
 		// Retorna o enum do tipo (corresponde ao CorElementType do .NET)
-		int GetTypeEnum() const;
+		int GetTypeEnum();
 
 		// Retorna a Classe associada ou a classe do elemento (se for array/ponteiro)
-		Class* GetClass() const;
+		Class* GetClass();
 		// Nome simples do tipo
-		std::string GetName() const;
+		std::string GetName();
 
 		// Nome completo para Reflexão (Namespace.Class)
-		std::string GetReflectionName() const;
+		std::string GetReflectionName();
 		// Nome qualificado pelo Assembly (Namespace.Class, AssemblyName)
-		std::string GetAssemblyQualifiedName() const;
+		std::string GetAssemblyQualifiedName();
 
 		// Checagem de Atributos e Estados
-		uint32_t GetAttrs() const;
-		bool IsByRef() const;
-		bool IsStatic() const;
-		bool IsPointer() const;
+		uint32_t GetAttrs();
+		bool IsByRef();
+		bool IsStatic();
+		bool IsPointer();
 
 		// Comparação de igualdade entre tipos
-		bool Equals(const Type* other) const;
+		bool Equals(Type* other);
 	};
 
 	struct Image : Pointer {
 		// Retorna o Assembly ao qual esta imagem pertence
-		const Assembly* GetAssembly();
+		Assembly* GetAssembly();
 
 		// Nome interno do módulo (ex: "Assembly-CSharp")
 		const char* GetName();
@@ -1256,15 +1373,18 @@ namespace Il2CppWrapper {
 		const char* GetFileName();
 
 		// O método principal (Main) se houver (geralmente nulo em DLLs)
-		const Method* GetEntryPoint();
+		Method* GetEntryPoint();
 		// --- Navegação de Classes ---
 
 		size_t GetClassCount();
 
-		const Class* GetClass(size_t index);
+
+		Class* GetClass(size_t index);
+		Class* GetClass(const char* namespaze, const char* name);
+
 
 		// Helper amigável para obter todas as classes do módulo
-		std::vector<const Class*> GetClasses();
+		std::vector<Class*> GetClasses();
 		template <typename F>
 		void ForEachClass(F&& callback)
 		{
@@ -1274,8 +1394,108 @@ namespace Il2CppWrapper {
 			}
 		}
 
-		static const Image* getCorlib();
 		
+
+		static Image* getCorlib();
+
+	
+		/**
+		 * @brief Retorna a imagem do Assembly-CSharp (código do jogo principal).
+		 * Este é geralmente o primeiro lugar para procurar classes customizadas do jogo.
+		 */
+		static Image* GetAssemblyCSharp();
+
+		/**
+		 * @brief Retorna a imagem do Assembly-CSharp-firstpass (plugins e código pré-compilado).
+		 * Contém plugins e código que deve ser compilado antes do código principal.
+		 */
+		static Image* GetAssemblyCSharpFirstPass();
+
+		// ========== UNITY ENGINE ==========
+
+		/**
+		 * @brief Retorna a imagem do UnityEngine.CoreModule.
+		 * Contém as classes core: GameObject, Transform, Component, etc.
+		 */
+		static Image* GetUnityEngineCoreModule();
+
+		/**
+		 * @brief Retorna a imagem do UnityEngine.PhysicsModule.
+		 * Contém Rigidbody, Collider, Physics, etc.
+		 */
+		static Image* GetUnityEnginePhysicsModule();
+
+		/**
+		 * @brief Retorna a imagem do UnityEngine.AudioModule.
+		 * Contém AudioSource, AudioClip, AudioListener, etc.
+		 */
+		static Image* GetUnityEngineAudioModule();
+
+		/**
+		 * @brief Retorna a imagem do UnityEngine.UIModule.
+		 * Contém Button, Image, Text, Canvas, etc.
+		 */
+		static Image* GetUnityEngineUIModule();
+
+		/**
+		 * @brief Retorna a imagem do UnityEngine.AnimationModule.
+		 * Contém Animator, Animation, AnimatorController, etc.
+		 */
+		static Image* GetUnityEngineAnimationModule();
+
+		/**
+		 * @brief Retorna a imagem do UnityEngine.ParticleSystemModule.
+		 * Contém ParticleSystem e seus componentes.
+		 */
+		static Image* GetUnityEngineParticleSystemModule();
+
+		/**
+		 * @brief Retorna a imagem do UnityEngine.TerrainPhysicsModule.
+		 * Contém Terrain e TerrainCollider.
+		 */
+		static Image* GetUnityEngineTerrainModule();
+
+		/**
+		 * @brief Retorna a imagem do UnityEngine.JSONSerializeModule.
+		 * Contém JsonUtility para serialização JSON.
+		 */
+		static Image* GetUnityEngineJSONSerializeModule();
+
+		/**
+		 * @brief Retorna a imagem do UnityEngine.AssetBundleModule.
+		 * Contém AssetBundle para carregamento de recursos.
+		 */
+		static Image* GetUnityEngineAssetBundleModule();
+
+		/**
+		 * @brief Retorna a imagem do UnityEngine.IMGUIModule.
+		 * Contém GUI e GUILayout (legacy UI).
+		 */
+		static Image* GetUnityEngineIMGUIModule();
+
+		/**
+		 * @brief Retorna a imagem do UnityEngine.NetworkingModule.
+		 * Contém NetworkTransform, NetworkBehaviour, etc.
+		 */
+		static Image* GetUnityEngineNetworkingModule();
+
+		/**
+		 * @brief Retorna a imagem do UnityEngine.InputModule.
+		 * Contém Input e InputManager.
+		 */
+		static Image* GetUnityEngineInputModule();
+
+		// ========== UNITY EDITOR ==========
+
+		/**
+		 * @brief Retorna a imagem do UnityEditor.
+		 * Contém classes do Editor (disponível apenas no Editor, não na build).
+		 */
+		static Image* GetUnityEditor();
+
+	
+		static Image* Get(const char* imageName);
+
 
 	};
 
@@ -1326,7 +1546,7 @@ namespace Il2CppWrapper {
 		 * @brief Tenta obter informações de depuração de um método.
 		 * @return true se as informações estiverem disponíveis (geralmente requer um arquivo .pdb ou metadados de debug).
 		 */
-		static bool GetMethodInfo(const Method* method, MethodDebugInfo* debugInfo);
+		static bool GetMethodInfo(Method* method, MethodDebugInfo* debugInfo);
 	};
 	struct TLSModule {
 		/**
@@ -1344,9 +1564,9 @@ namespace Il2CppWrapper {
 
 		static CustomAttribute* FromClass(Class* klass);
 
-		static CustomAttribute* FromMethod(const Method* method);
+		static CustomAttribute* FromMethod(Method* method);
 
-		static CustomAttribute* FromField(const Field* field);
+		static CustomAttribute* FromField(Field* field);
 
 		// --- Métodos de Instância ---
 
@@ -1506,7 +1726,119 @@ namespace Il2CppWrapper {
 		}
 	}
 
+	// ========== STD::ARRAY ==========
+	template <typename T, std::size_t N>
+	void ValueToPointer(Pointer*& ptr, const std::array<T, N>& value)
+	{
+		// Points to the first element of the array
+		ptr = reinterpret_cast<Pointer*>(const_cast<T*>(value.data()));
+	}
 
+	template <typename T, std::size_t N>
+	void PointerToValue(const Pointer* ptr, std::array<T, N>& value)
+	{
+		// Copy data from pointer to array
+		if (ptr) {
+			std::memcpy(value.data(), ptr, N * sizeof(T));
+		}
+	}
+
+	// ========== STD::SPAN ==========
+	template <typename T>
+	void ValueToPointer(Pointer*& ptr, const std::span<T>& value)
+	{
+		// Points to the first element; note: size information is lost
+		ptr = reinterpret_cast<Pointer*>(const_cast<T*>(value.data()));
+	}
+
+	template <typename T>
+	void PointerToValue(const Pointer* ptr, std::span<T>& value)
+	{
+		// Cannot reconstruct span without size information
+		// This is a no-op or error case
+		if (ptr) {
+			// Span requires external size; this conversion is incomplete
+			value = std::span<T>();
+		}
+	}
+
+	// ========== STD::STRING ==========
+	template <>
+	inline void ValueToPointer(Pointer*& ptr, const std::string& value)
+	{
+		// Points to the C-string data
+		ptr = reinterpret_cast<Pointer*>(const_cast<char*>(value.c_str()));
+	}
+
+	template <>
+	inline void PointerToValue(const Pointer* ptr, std::string& value)
+	{
+		// Reconstruct string from C-string pointer
+		if (ptr) {
+			value = std::string(reinterpret_cast<const char*>(ptr));
+		}
+		else {
+			value.clear();
+		}
+	}
+
+	// ========== STD::STRING_VIEW ==========
+	template <>
+	inline void ValueToPointer(Pointer*& ptr, const std::string_view& value)
+	{
+		// Points to the first character; size information is lost
+		ptr = reinterpret_cast<Pointer*>(const_cast<char*>(value.data()));
+	}
+
+	template <>
+	inline void PointerToValue(const Pointer* ptr, std::string_view& value)
+	{
+		// Cannot reconstruct string_view without size information
+		// This is a no-op or error case
+		if (ptr) {
+			value = std::string_view(reinterpret_cast<const char*>(ptr), 0);
+		}
+	}
+
+	// ========== STD::WSTRING ==========
+	template <>
+	inline void ValueToPointer(Pointer*& ptr, const std::wstring& value)
+	{
+		// Points to the wide C-string data
+		ptr = reinterpret_cast<Pointer*>(const_cast<wchar_t*>(value.c_str()));
+	}
+
+	template <>
+	inline void PointerToValue(const Pointer* ptr, std::wstring& value)
+	{
+		// Reconstruct wstring from wide C-string pointer
+		if (ptr) {
+			value = std::wstring(reinterpret_cast<const wchar_t*>(ptr));
+		}
+		else {
+			value.clear();
+		}
+	}
+
+	// ========== STD::U16STRING ==========
+	template <>
+	inline void ValueToPointer(Pointer*& ptr, const std::u16string& value)
+	{
+		// Points to the UTF-16 string data
+		ptr = reinterpret_cast<Pointer*>(const_cast<char16_t*>(value.c_str()));
+	}
+
+	template <>
+	inline void PointerToValue(const Pointer* ptr, std::u16string& value)
+	{
+		// Reconstruct u16string from UTF-16 pointer
+		if (ptr) {
+			value = std::u16string(reinterpret_cast<const char16_t*>(ptr));
+		}
+		else {
+			value.clear();
+		}
+	}
 
 	/**
 	 * @brief RAII Guard para MemoryInformation
@@ -1528,16 +1860,16 @@ namespace Il2CppWrapper {
 
 		~MemoryInformationGuard();
 
-		MemoryInformation* get() const;
-		MemoryInformation* operator->() const;
-		MemoryInformation& operator*() const;
+		MemoryInformation* get();
+		MemoryInformation* operator->();
+		MemoryInformation& operator*();
 
 		MemoryInformation* release();
 		
 
 		void reset(MemoryInformation* p = nullptr);
 
-		explicit operator bool() const;
+		explicit operator bool();
 	};
 
 	/**
@@ -1560,15 +1892,15 @@ namespace Il2CppWrapper {
 
 		~CustomAttributeGuard();
 
-		CustomAttribute* get() const;
-		CustomAttribute* operator->() const;
-		CustomAttribute& operator*() const;
+		CustomAttribute* get();
+		CustomAttribute* operator->();
+		CustomAttribute& operator*();
 
 		CustomAttribute* release();
 
 		void reset(CustomAttribute* p = nullptr);
 
-		explicit operator bool() const;
+		explicit operator bool();
 	};
 
 	/**
@@ -1591,17 +1923,17 @@ namespace Il2CppWrapper {
 
 		~ManagedPointerGuard();
 
-		ManagedPointer* get() const;
-		ManagedPointer* operator->() const;
+		ManagedPointer* get();
+		ManagedPointer* operator->();
 
 		template <typename T>
-		T* as() const { return ptr->as<T>(); }
+		T* as() { return ptr->as<T>(); }
 
 		ManagedPointer* release();
 
 		void reset(ManagedPointer* p = nullptr);
 
-		explicit operator bool() const;
+		explicit operator bool();
 	};
 
 	/**
@@ -1624,17 +1956,17 @@ namespace Il2CppWrapper {
 
 		~GCPointerFixedGuard();
 
-		GCPointerFixed* get() const;
-		GCPointerFixed* operator->() const;
+		GCPointerFixed* get();
+		GCPointerFixed* operator->();
 
 		template <typename T>
-		T* as() const { return ptr->as<T>(); }
+		T* as() { return ptr->as<T>(); }
 
 		GCPointerFixed* release();
 
 		void reset(GCPointerFixed* p = nullptr);
 
-		explicit operator bool() const;
+		explicit operator bool();
 	};
 
 	/**
@@ -1657,16 +1989,16 @@ namespace Il2CppWrapper {
 
 		~GCHandleGuard();
 
-		GCHandle* get() const;
-		GCHandle* operator->() const;
+		GCHandle* get();
+		GCHandle* operator->();
 
-		Object* GetTarget() const;
+		Object* GetTarget();
 
 		GCHandle* release();
 
 		void reset(GCHandle* p = nullptr);
 
-		explicit operator bool() const;
+		explicit operator bool();
 	};
 
 	/**
@@ -1689,8 +2021,8 @@ namespace Il2CppWrapper {
 
 		~LivenessGuard();
 
-		Liveness* get() const;
-		Liveness* operator->() const;
+		Liveness* get();
+		Liveness* operator->();
 
 		void FromRoot(Object* root);
 
@@ -1702,7 +2034,58 @@ namespace Il2CppWrapper {
 
 		void reset(Liveness* p = nullptr);
 
-		explicit operator bool() const;
+		explicit operator bool();
+	};
+
+	
+	struct ReflectionMethod : Object {
+		Method* ToMethod();
+
+	};
+	struct ReflectionField: Object{
+	
+		Field* ToField();
+
+	};
+	struct ReflectionType : Object {
+		Class* ToClass();
+
+	};
+
+	enum class MethodFlagsEnum
+	{
+		MemberAccessMask = 0x0007,
+		CompilerControlled = 0x0000,
+		Private = 0x0001,
+		FamAndAssem = 0x0002,
+		Assem = 0x0003,
+		Family = 0x0004,
+		FamOrAssem = 0x0005,
+		Public = 0x0006,
+
+		Static = 0x0010,
+		Final = 0x0020,
+		Virtual = 0x0040,
+		HideBySig = 0x0080,
+
+		VTableLayoutMask = 0x0100,
+		ReuseSlot = 0x0000,
+		NewSlot = 0x0100,
+
+		Strict = 0x0200,
+		Abstract = 0x0400,
+		SpecialName = 0x0800,
+
+		PInvokeImpl = 0x2000,
+		UnmanagedExport = 0x0008,
+
+		/*
+		 * For runtime use only
+		 */
+		ReservedMask = 0xd000,
+		RtSpecialName = 0x1000,
+		HasSecurity = 0x4000,
+		RequireSecObject = 0x8000
 	};
 
 }

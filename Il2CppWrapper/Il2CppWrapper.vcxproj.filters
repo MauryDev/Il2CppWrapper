@@ -15,21 +15,507 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Il2CppWrapper.cpp">
+    <ClCompile Include="Il2Cpp\Il2CppWrapper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WindowsDist.cpp">
+    <ClCompile Include="Il2Cpp\WindowsDist.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Il2Cpp\Il2CppHooking.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Il2Cpp\ExceptionHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Il2Cpp\Il2CppCoreTypes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Il2Cpp\Il2CppTypeHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Il2Cpp\Il2CppEnumerable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Il2Cpp\Il2CppDelegate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Il2Cpp\metadata\FieldInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Il2Cpp\metadata\MethodInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Il2Cpp\metadata\ClassInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Il2Cpp\metadata\MetadataView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Il2Cpp\metadata\CodeGeneration.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Il2Cpp\CoreLib\metadata.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Il2Cpp\UnityInterop\metadata.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Il2Cpp\Unity\UnityHelpers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Il2Cpp\Unity\UnityContext.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Il2Cpp\Unity\InputHelpers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Il2Cpp\Unity\Vector3.h">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Il2Cpp\Unity\Vector3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Il2Cpp\Unity\Vector2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Il2Cpp\Unity\Quaternion.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Il2Cpp\Il2CppComponentHook.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Il2CppWrapper.h">
+    <ClInclude Include="Il2Cpp\Il2CppWrapper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WindowsDist.h">
+    <ClInclude Include="Il2Cpp\WindowsDist.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DistCallback.h">
+    <ClInclude Include="Il2Cpp\DistCallback.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\Il2CppHooking.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\ExceptionHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\Il2CppCoreTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\Il2CppTypeHelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\Il2CppEnumerable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\Il2CppDelegate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\metadata\FieldInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\metadata\MethodInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\metadata\ClassInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\metadata\MetadataView.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\metadata\MethodGen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\metadata\FieldGen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\metadata\CodeGeneration.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\metadata.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Action.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Action`1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Activator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Array.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Attribute.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Boolean.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Byte.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Char.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Convert.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\DateTime.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\DateTimeOffset.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Decimal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Delegate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Double.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Environment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\EventHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Exception.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Func`1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Func`2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Guid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\IComparable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\IComparable`1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\IDisposable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\IEquatable`1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Int16.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Int32.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Int64.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Math.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Nullable`1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Predicate`1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Random.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\SByte.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Single.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\String.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\TimeSpan.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Type.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\UInt16.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\UInt32.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\UInt64.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Version.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System\Void.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Collections\ICollection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Collections\IDictionary.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Collections\IEnumerable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Collections\IEnumerator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Collections\IList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Collections.Generic\Dictionary`2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Collections.Generic\ICollection`1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Collections.Generic\IDictionary`2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Collections.Generic\IEnumerable`1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Collections.Generic\IEnumerator`1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Collections.Generic\IList`1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Collections.Generic\List`1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Collections.Generic\Queue`1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Collections.Generic\Stack`1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.IO\BinaryReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.IO\BinaryWriter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.IO\Directory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.IO\File.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.IO\MemoryStream.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.IO\Stream.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Reflection\FieldInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Reflection\MethodInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Reflection\PropertyInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Threading\CancellationToken.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Threading\Thread.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Threading.Tasks\Task.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Threading.Tasks\Task`1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\System.Core.dll\System.Collections.Generic\HashSet`1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\System.dll\System\Uri.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\System.dll\System.Collections.Generic\LinkedList`1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\System.Net.Http.dll\System.Net.Http\HttpResponseMessage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\CoreLib\mscorlib.dll\System.Reflection\MethodBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\metadata.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\Unity.TextMeshPro.dll\TMPro\TextMeshProUGUI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\Unity.TextMeshPro.dll\TMPro\TMP_Text.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.AnimationModule.dll\UnityEngine\Animation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.AnimationModule.dll\UnityEngine\Animator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.AudioModule.dll\UnityEngine\AudioClip.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.AudioModule.dll\UnityEngine\AudioSource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Application.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Behaviour.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Color.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Component.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Coroutine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Debug.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\GameObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\LayerMask.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Material.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\MeshFilter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\MeshRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\MonoBehaviour.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Quaternion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Renderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Resources.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\ScriptableObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Sprite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Texture2D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Time.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Transform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Vector2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\Vector3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine\WaitForSeconds.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.CoreModule.dll\UnityEngine.SceneManagement\Scene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.InputLegacyModule.dll\UnityEngine\Input.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.PhysicsModule.dll\UnityEngine\BoxCollider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.PhysicsModule.dll\UnityEngine\CapsuleCollider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.PhysicsModule.dll\UnityEngine\Collider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.PhysicsModule.dll\UnityEngine\Physics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.PhysicsModule.dll\UnityEngine\RaycastHit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.PhysicsModule.dll\UnityEngine\Rigidbody.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.PhysicsModule.dll\UnityEngine\SphereCollider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.UI.dll\UnityEngine.UI\Button.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.UI.dll\UnityEngine.UI\Image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.UI.dll\UnityEngine.UI\Text.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\UnityInterop\UnityEngine.UIModule.dll\UnityEngine\Canvas.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\Unity\UnityHelpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\Unity\UnityContext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\Unity\InputHelpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\Unity\Vector2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\Unity\Quaternion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Il2Cpp\Il2CppComponentHook.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
